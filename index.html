@@ -1815,80 +1815,42 @@ function buildShareText(){
    WHATSAPP SHARE - ZOHO SAFE
 ================================ */
 
-function shareToWhatsApp()
-{
-    try
-    {
-        // 1. Build your message (EDIT THIS PART)
-        var farmName = document.getElementById("fName")?.value || "";
-        var owner = document.getElementById("oName")?.value || "";
-        var milk = document.getElementById("my")?.value || "";
+function shareWhatsApp() {
+    if (!sI.length) { alert('पहले राशन बनाएं।'); return; }
+    var txt = buildShareText();
+    if (!txt) return;
 
-        var message =
-        "🐄 *Doctor Feeds – Ration Report*\n\n" +
-        "👨‍🌾 Farmer: " + owner + "\n" +
-        "🏡 Farm: " + farmName + "\n" +
-        "🥛 Milk Yield: " + milk + " L/day\n\n" +
-        "📊 Balanced ration prepared.\n" +
-        "Contact Doctor Feeds for optimization.";
+    var encodedTxt = encodeURIComponent(txt);
+    var isAndroid = /Android/i.test(navigator.userAgent);
+    var isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-        // 2. Encode message
-        var encodedMsg = encodeURIComponent(message);
-
-        // 3. WhatsApp URL (WEB SAFE)
-        var waUrl = "https://wa.me/?text=" + encodedMsg;
-
-        // 4. Detect Zoho environment
-        if(typeof ZOHO !== "undefined" && ZOHO.CREATOR)
-        {
-            // Zoho Creator Mobile App / Portal
-            ZOHO.CREATOR.UTIL.openUrl(waUrl, "new window");
-        }
-        else
-        {
-            // Normal browser fallback
-            window.open(waUrl, "_blank");
-        }
-    }
-    catch(e)
-    {
-        console.error("WhatsApp Share Error:", e);
-        alert("Unable to open WhatsApp. Please try again.");
+    if (isAndroid) {
+        // Android Intent URI: Bypasses the WebView and forces the Android OS to open WhatsApp
+        var intentUrl = "intent://send?text=" + encodedTxt + "#Intent;action=android.intent.action.SEND;type=text/plain;package=com.whatsapp;scheme=whatsapp;end";
+        window.top.location.href = intentUrl;
+    } else if (isIOS) {
+        // iOS Universal Link
+        window.top.location.href = "https://wa.me/?text=" + encodedTxt;
+    } else {
+        // Desktop fallback
+        window.open("https://web.whatsapp.com/send?text=" + encodedTxt, "_blank");
     }
 }
-}
 
-function shareEmail(){
-  if(!sI.length){alert('Please formulate a ration first.');return}
-  var txt=buildShareText();
-  if(!txt)return;
-  executeSafeShare(txt,'Email');
-}
-
-function executeSafeShare(txt,type){
-  /* Method 1: Native mobile share sheet — safest for mobile apps */
-  if(navigator.share){
-    navigator.share({
-      title:'Doctor Feeds Ration Report',
-      text:txt
-    }).catch(function(err){
-      /* User cancelled or failed — fallback to modal */
-      showShareModal(txt,type);
-    });
-    return;
-  }
-  /* Method 2: Detect mobile/Zoho app environment */
-  var isMobileApp=(navigator.userAgent.indexOf('ZohoCreator')>-1||/iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
-  if(isMobileApp){
-    /* Do NOT attempt mailto: or whatsapp:// — crashes the webview */
-    showShareModal(txt,type);
-  } else {
-    /* Desktop browser — safe to open URL */
-    var url=type==='WhatsApp'
-      ?'https://api.whatsapp.com/send?text='+encodeURIComponent(txt)
-      :'mailto:?subject=Ration Report&body='+encodeURIComponent(txt);
-    window.open(url,'_blank');
-  }
+function shareEmail() {
+    if (!sI.length) { alert('Please formulate a ration first.'); return; }
+    var txt = buildShareText();
+    if (!txt) return;
+    
+    var mailUrl = 'mailto:?subject=' + encodeURIComponent('Doctor Feeds Ration Report') + '&body=' + encodeURIComponent(txt);
+    
+    // Injecting a hidden anchor with target="_system" to force external app routing
+    var a = document.createElement('a');
+    a.href = mailUrl;
+    a.target = '_system'; 
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 }
 
 </script>
