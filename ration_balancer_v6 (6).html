@@ -1,0 +1,1939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ration Balancer NRC – Doctor Feeds</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- html2pdf replaced with popup window print -->
+<style>
+:root{
+  --p:#1b9a6f;--pl:#137a57;--pp:#eafdf7;--pa:#7dcfb0;
+  --a:#d85d1a;--al:#fff3ec;
+  --d:#b71d1b;--dp:#fdecec;
+  --i:#1b9a6f;--ip:#eafdf7;
+  --pu:#6A1B9A;--pup:#F3E5F5;
+  --bg:#f4f6f5;--c:#FFFFFF;--t:#1a2e24;--tl:#4a6358;--b:#d8e6e0;
+  --r:8px;--rs:5px;
+  --shadow:0 1px 3px rgba(0,0,0,.06),0 3px 12px rgba(0,0,0,.05)
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#f4f6f5;color:#1a2e24;line-height:1.6;font-size:14px}
+.hdr{background:#ffffff;color:#1a2e24;padding:8px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:1px solid #d8e6e0;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.hdr-left{display:flex;align-items:center;gap:12px}
+.logo{height:42px;display:flex;align-items:center}
+.hdr h1{font-size:15px;font-weight:700;letter-spacing:-.2px;color:#1a2e24}.hdr p{font-size:11px;color:#4a6358;margin-top:1px}
+.hdr-btns{display:flex;gap:8px}
+.btn{padding:7px 16px;border:none;border-radius:var(--rs);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .15s}
+.btn:hover{opacity:.9;transform:translateY(-1px)}
+.btn-s{background:#eafdf7;color:#137a57;border:1.5px solid #7dcfb0}.btn-p{background:#d85d1a;color:#fff}.btn-r{background:#f4f6f5;color:#4a6358;border:1.5px solid #d8e6e0}
+.prog{background:#f4f6f5;padding:8px 20px;display:flex;align-items:center;justify-content:center;gap:0;border-bottom:1px solid #d8e6e0}
+.stp{display:flex;align-items:center;gap:7px;padding:5px 12px;cursor:pointer;transition:all .2s;border-radius:50px}
+.stp.act{background:#eafdf7;border-radius:50px}
+.stp-n{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:var(--b);color:var(--tl);transition:all .2s}
+.stp.act .stp-n,.stp.done .stp-n{background:#1b9a6f;color:#fff}
+.stp.act .stp-n{box-shadow:0 0 0 3px #7dcfb0}
+.stp-l{font-size:11px;font-weight:600;color:var(--tl)}
+.stp.act .stp-l{color:var(--p)}
+.stp-c{width:32px;height:2px;background:var(--b);margin:0 2px;border-radius:2px}.stp-c.dn{background:#1b9a6f}
+.ctr{max-width:1020px;margin:0 auto;padding:18px 16px}
+.sec{display:none}.sec.act{display:block}
+.crd{background:#ffffff;border-radius:var(--r);box-shadow:var(--shadow);margin-bottom:14px;overflow:hidden;border:1px solid #e0eae5}
+.crd-h{padding:10px 16px;font-size:11px;font-weight:700;display:flex;align-items:center;gap:8px;border-bottom:1px solid #d8e6e0;background:#f7fdfb;color:#1a2e24;letter-spacing:.4px;text-transform:uppercase}
+.crd-b{padding:18px}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.fgrp{display:flex;flex-direction:column;gap:4px}
+.fgrp label{font-size:10px;font-weight:700;color:var(--tl);text-transform:uppercase;letter-spacing:.5px}
+.fgrp input,.fgrp select{padding:9px 12px;border:1.5px solid var(--b);border-radius:var(--rs);font-family:inherit;font-size:13px;transition:border-color .15s;background:#fff;color:var(--t)}
+.fgrp input:focus,.fgrp select:focus{outline:none;border-color:#1b9a6f;box-shadow:0 0 0 3px #eafdf7}
+.tgl{display:flex;gap:0;border-radius:var(--rs);overflow:hidden;border:1.5px solid var(--b)}
+.tgl-b{flex:1;padding:9px 14px;border:none;background:#fff;font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;text-align:center;color:var(--t)}
+.tgl-b.act{background:#1b9a6f;color:#fff;font-weight:700}
+.tgl-b:not(.act):hover{background:#eafdf7}
+.brg{display:grid;grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:7px;margin-top:8px}
+.brc{padding:10px;border:1.5px solid var(--b);border-radius:var(--rs);text-align:center;cursor:pointer;transition:all .15s;font-size:12px;font-weight:500;color:var(--t)}
+.brc:hover{border-color:#1b9a6f;background:#eafdf7}
+.brc.act{border-color:#1b9a6f;background:#1b9a6f;color:#fff}
+.brc small{display:block;font-size:10px;opacity:.7;margin-top:2px}
+.stg{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}
+.stg-b{padding:9px 5px;border:1.5px solid var(--b);border-radius:var(--rs);background:#fff;cursor:pointer;text-align:center;transition:all .15s;font-family:inherit;font-size:11px;font-weight:500;color:var(--t)}
+.stg-b:hover{border-color:#1b9a6f}.stg-b.act{background:#1b9a6f;color:#fff;border-color:#1b9a6f}
+.stg-b small{display:block;font-size:9px;opacity:.7;margin-top:2px}
+
+/* INGREDIENT PANEL */
+.ing-cat-tabs{display:flex;background:#F5F5F5;border-bottom:2px solid var(--b);overflow-x:auto;flex-shrink:0}
+.ict{padding:9px 16px;border:none;background:transparent;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .2s;color:var(--tl)}
+.ict.act{color:#1b9a6f;border-bottom-color:#1b9a6f;background:#fff}
+.ict:hover:not(.act){background:#ECECEC}
+.ing-list{max-height:340px;overflow-y:auto}
+.ing-row{display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid #F0F0F0;transition:background .15s}
+.ing-row:last-child{border-bottom:none}
+.ing-row:hover{background:#f0fdf8}
+.ing-row.selected{background:#eafdf7;border-left:3px solid #1b9a6f}
+.ing-chk{width:18px;height:18px;accent-color:var(--p);cursor:pointer;flex-shrink:0}
+.ing-info{flex:1;min-width:0}
+.ing-name{font-size:13px;font-weight:600;color:#1a2e24}
+.ing-name small{font-weight:400;color:var(--tl);font-size:11px;margin-left:4px}
+.ing-nuts{display:flex;gap:8px;margin-top:3px;flex-wrap:wrap}
+.inut{font-size:10px;color:var(--tl);background:#F5F5F5;padding:2px 7px;border-radius:50px;white-space:nowrap}
+.ing-price-col{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0}
+.ing-price-lbl{font-size:10px;color:var(--tl)}
+.ing-price-inp{width:72px;padding:6px 8px;border:2px solid var(--b);border-radius:6px;font-family:inherit;font-size:12px;font-weight:600;text-align:right;color:var(--p)}
+.ing-price-inp:focus{outline:none;border-color:#1b9a6f}
+
+/* SELECTED TABLE */
+.itbl{width:100%;border-collapse:collapse;font-size:12px}
+.itbl th{background:#f7fdfb;color:#1a2e24;padding:9px 12px;text-align:left;font-weight:700;font-size:11px;letter-spacing:.3px;border-bottom:2px solid #1b9a6f}
+.itbl td{padding:8px 12px;border-bottom:1px solid #F0F0F0;vertical-align:middle}
+.itbl tr:nth-child(even){background:#FAFAFA}
+.itbl tr:hover{background:var(--pp)}
+.qi{width:70px;padding:6px 8px;border:2px solid var(--b);border-radius:6px;font-family:inherit;font-size:12px;text-align:center}
+.qi:focus{outline:none;border-color:#1b9a6f}
+.qip{width:65px;padding:5px 7px;border:2px solid var(--b);border-radius:6px;font-family:inherit;font-size:11px;text-align:right;color:var(--p)}
+.qip:focus{outline:none;border-color:var(--a)}
+.rbtn{width:26px;height:26px;border:none;background:var(--dp);color:var(--d);border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;margin:0 auto}
+.trow{background:#eafdf7!important;font-weight:700}
+.noi{text-align:center;padding:35px;color:var(--tl)}
+.noi .ic{font-size:36px;margin-bottom:8px}
+
+/* SUMMARY CARDS */
+.sg{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.sc{padding:16px;border-radius:var(--r);text-align:center}
+.sc.g{background:#eafdf7;border:1px solid #7dcfb0;border-top:3px solid #1b9a6f}
+.sc.o{background:#fff3ec;border:1px solid #f0a885;border-top:3px solid #d85d1a}
+.sc.bl{background:#eafdf7;border:1px solid #7dcfb0;border-top:3px solid #137a57}
+.sc.pr{background:#f4f6f5;border:1px solid #d8e6e0;border-top:3px solid #4a6358}
+.sc .v{font-size:22px;font-weight:800;margin-bottom:2px}
+.sc.g .v{color:#1b9a6f}.sc.o .v{color:#d85d1a}.sc.bl .v{color:#137a57}.sc.pr .v{color:#1a2e24}
+.sc .l{font-size:11px;font-weight:500;color:var(--tl)}.sc .lh{font-size:10px;color:#999}
+.at{width:100%;border-collapse:collapse;font-size:13px}
+.at th{background:#f7fdfb;padding:10px 14px;text-align:left;font-weight:700;font-size:12px;border-bottom:2px solid #1b9a6f;color:#1a2e24}
+.at td{padding:10px 14px;border-bottom:1px solid #F0F0F0}
+.sb{padding:3px 10px;border-radius:50px;font-size:10px;font-weight:600}
+.sb-e{background:#eafdf7;color:#137a57}.sb-o{background:#eafdf7;color:#1b9a6f}.sb-d{background:#FFEBEE;color:#B71C12}
+.bg{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.br{display:flex;justify-content:space-between;padding:5px 0;font-size:13px}
+.br span:last-child{font-weight:600}
+.mg{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.mg3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.mc{text-align:center;padding:16px;border:1px solid var(--b);border-radius:var(--r);background:#fff}
+.mc .mv{font-size:22px;font-weight:700;color:#1b9a6f}.mc .ml{font-size:12px;font-weight:600;margin-bottom:3px}.mc .ms{font-size:10px;color:#999}
+/* SEARCH BOX */
+.ing-search-wrap{padding:10px 16px;border-bottom:1px solid var(--b);background:#fff}
+.ing-search-inp{width:100%;padding:8px 12px 8px 34px;border:1.5px solid var(--b);border-radius:var(--rs);font-family:inherit;font-size:13px;background:#F7FAF8 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2352796F' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.099zm-5.242 1.656a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z'/%3E%3C/svg%3E") no-repeat 10px center}
+.ing-search-inp:focus{outline:none;border-color:#1b9a6f;box-shadow:0 0 0 3px #eafdf7}
+/* SHARE BUTTON */
+.btn-w{background:#1b9a6f;color:#fff}
+.btn-e{background:#137a57;color:#fff}
+/* MOBILE PDF via html2pdf */
+@media(max-width:768px){.btn-p{background:#d85d1a;color:#fff}}
+.nb{display:flex;justify-content:space-between;margin-top:24px;padding-top:16px;border-top:1px solid var(--b)}
+.bn{padding:12px 28px;border:none;border-radius:var(--rs);font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .2s}
+.bp{background:#fff;color:var(--t);border:2px solid var(--b)}.bx{background:#1b9a6f;color:#fff}.bx:hover{background:#137a57}
+
+/* RATION COMPOSITION BARS */
+.rc-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:9px;font-size:12px}
+.rc-label{width:160px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--t);flex-shrink:0}
+.rc-bar-bg{flex:1;background:#F0F0F0;border-radius:50px;height:14px;overflow:hidden}
+.rc-bar-fill{height:100%;border-radius:50px;transition:width .6s ease}
+.rc-pct{width:42px;text-align:right;font-weight:700;color:var(--tl);flex-shrink:0}
+.rc-kg{width:46px;text-align:right;font-size:11px;color:#aaa;flex-shrink:0}
+.rc-legend{display:flex;gap:16px;font-size:11px;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:1px solid #F0F0F0}
+.rc-leg-item{display:flex;align-items:center;gap:5px}
+.rc-leg-dot{width:12px;height:12px;border-radius:2px;display:inline-block;flex-shrink:0}
+
+/* AI RECOMMENDATIONS */
+.ai-card{background:#ffffff;border:1px solid #e0eae5;border-radius:var(--r);margin-bottom:16px;overflow:hidden;border-left:4px solid #1b9a6f}
+.ai-hdr{padding:14px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+.ai-hdr-left{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;color:#1a2e24;text-transform:uppercase;letter-spacing:.3px}
+.ai-badge{background:#1b9a6f;color:#fff;border-radius:50px;padding:2px 10px;font-size:12px;font-weight:700}
+.ai-chevron{font-size:14px;color:#999;transition:transform .3s;display:inline-block}
+.ai-chevron.open{transform:rotate(180deg)}
+.ai-body{padding:0 16px 16px;display:none}
+.ai-body.open{display:block}
+.ai-issue{border:1px solid #F0EDD0;border-radius:var(--rs);margin-bottom:8px;overflow:hidden;background:#fff}
+.ai-issue-hdr{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;font-size:13px;font-weight:600;transition:background .15s;user-select:none}
+.ai-issue-hdr:hover{background:#f7fdfb}
+.ai-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.ai-dot.red{background:#C62828}.ai-dot.yel{background:#F9A825}.ai-dot.grn{background:#2E7D32}
+.ai-chevron2{margin-left:auto;font-size:12px;color:#ccc;transition:transform .3s;display:inline-block}
+.ai-chevron2.open{transform:rotate(180deg)}
+.ai-issue-body{padding:10px 14px 14px 34px;border-top:1px solid #F5F0D8;display:none}
+.ai-issue-body.open{display:block}
+.ai-sub{font-size:10px;font-weight:700;color:var(--tl);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+.ai-ing-row{display:flex;align-items:baseline;gap:8px;padding:5px 0;border-bottom:1px solid #F9F9F9;font-size:12px}
+.ai-ing-row:last-child{border:none}
+.ai-ing-name{font-weight:600;min-width:180px;color:var(--t);flex-shrink:0}
+.ai-ing-why{color:var(--tl)}
+
+/* AI SPINNER */
+@keyframes spin{to{transform:rotate(360deg)}}
+.ai-spinner{width:22px;height:22px;border:3px solid #1b9a6f40;border-top-color:#1b9a6f;border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0}
+
+/* AI REC ROWS */
+.ai-rec-row{background:#FAFAFA;border:1px solid #F0F0F0;border-radius:8px;padding:10px 12px;margin-bottom:8px}
+.ai-rec-row:last-child{margin-bottom:0}
+.ai-rec-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;gap:8px}
+.ai-rec-ing{font-size:12px;font-weight:700;color:var(--t)}
+.ai-rec-action{font-size:10px;font-weight:700;padding:3px 8px;border-radius:50px;white-space:nowrap}
+.ai-rec-why{font-size:11px;color:var(--t);line-height:1.5}
+.ai-rec-why-hi{font-size:10px;color:var(--tl);line-height:1.5;margin-top:2px}
+
+/* PRINT */
+/* ── PRINT REPORT HEADER ── */
+.pr-header{display:none}
+.pr-body{display:none}
+.pr-header-top{display:flex;align-items:center;justify-content:space-between;padding-bottom:10px;border-bottom:2px solid #1b9a6f;margin-bottom:8px}
+.pr-logo-block{display:flex;align-items:center;gap:10px}
+.pr-logo-img{height:48px;width:auto}
+.pr-brand-name{font-size:18px;font-weight:800;color:#1a2e24;line-height:1.2}
+.pr-brand-tag{font-size:10px;color:#4a6358;margin-top:2px}
+.pr-report-title{text-align:right}
+.pr-title-main{font-size:16px;font-weight:700;color:#1a2e24}
+.pr-title-sub{font-size:10px;color:#4a6358;margin-top:2px}
+.pr-info-bar{background:#f7fdfb;border:1px solid #d8e6e0;border-radius:6px;padding:8px 14px;margin-top:8px}
+.pr-info-line{font-size:11px;color:#1a2e24;line-height:1.8;font-weight:500}
+
+/* ── PRINT AI SECTION ── */
+.pr-ai-wrap{border:1px solid #d8e6e0;border-left:4px solid #1b9a6f;border-radius:8px;overflow:hidden;margin-bottom:8px;page-break-inside:avoid}
+.pr-ai-header{background:#f7fdfb;padding:10px 14px;border-bottom:1px solid #d8e6e0;display:flex;align-items:center;justify-content:space-between}
+.pr-ai-header-title{font-size:11px;font-weight:800;color:#1a2e24;text-transform:uppercase;letter-spacing:.4px}
+.pr-ai-score-row{display:flex;align-items:center;gap:14px;padding:10px 14px;border-bottom:1px solid #eee}
+.pr-ai-score-circle{width:48px;height:48px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;font-weight:800;color:#fff;font-size:15px;line-height:1}
+.pr-ai-score-label{font-size:13px;font-weight:700;margin-bottom:2px}
+.pr-ai-score-sub{font-size:10px;color:#666}
+.pr-ai-issue{border-bottom:1px solid #f0f0f0;padding:10px 14px;page-break-inside:avoid}
+.pr-ai-issue:last-of-type{border-bottom:none}
+.pr-ai-issue-hdr{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px}
+.pr-ai-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.pr-ai-dot.red{background:#b71d1b}.pr-ai-dot.yel{background:#d85d1a}.pr-ai-dot.grn{background:#1b9a6f}
+.pr-ai-issue-title-en{font-size:12px;font-weight:700;color:#1a2e24;line-height:1.4}
+.pr-ai-issue-title-hi{font-size:10px;color:#4a6358;line-height:1.4;margin-top:1px}
+.pr-ai-issue-body{padding-left:17px}
+.pr-ai-issue-desc-en{font-size:11px;color:#1a2e24;line-height:1.6;margin-bottom:3px}
+.pr-ai-issue-desc-hi{font-size:10px;color:#4a6358;line-height:1.5;margin-bottom:8px}
+.pr-ai-recs-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#999;margin-bottom:5px}
+.pr-ai-rec{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-top:1px solid #f5f5f5;font-size:10px}
+.pr-ai-rec-ing{font-weight:700;color:#1a2e24;min-width:140px;flex-shrink:0}
+.pr-ai-rec-act{padding:1px 7px;border-radius:3px;font-size:9px;font-weight:700;flex-shrink:0;align-self:flex-start;margin-top:1px;white-space:nowrap}
+.pr-ai-rec-why{color:#1a2e24;flex:1;line-height:1.5}
+.pr-ai-rec-why-hi{color:#4a6358;flex:1;line-height:1.5;font-size:9px}
+.pr-ai-econ{background:#eafdf7;border:1px solid #7dcfb0;border-radius:6px;margin:10px 14px;padding:10px 12px;font-size:10px;line-height:1.6;page-break-inside:avoid}
+.pr-ai-econ-title{font-weight:700;color:#1a2e24;margin-bottom:4px;font-size:10px}
+.pr-ai-prio{background:#fff3ec;border:1px solid #f0a885;border-radius:6px;margin:6px 14px 12px;padding:10px 12px;font-size:10px;line-height:1.6;page-break-inside:avoid}
+.pr-ai-prio-title{font-weight:700;color:#d85d1a;margin-bottom:4px;font-size:10px}
+
+@media print{
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  body{background:#fff!important}
+  .hdr,.prog,.nb,.hdr-btns,.ing-panel,.ai-card,.no-print,#s1,#s2,#s3,#s4{display:none!important}
+  .pr-header{display:block!important}
+  .pr-body{display:block!important}
+  .print-section,.pr-header,.pr-body{display:block!important}
+  .print-header{display:block!important;text-align:center;padding:16px 0 20px;border-bottom:2px solid #1b9a6f;margin-bottom:20px}
+  .print-header h2{color:#1B4332;font-size:18px;margin-bottom:4px}
+  .print-header p{color:#555;font-size:11px;margin:2px 0}
+  .crd{box-shadow:none!important;border:1px solid #ddd!important;page-break-inside:avoid;margin-bottom:10px}
+  .ctr{padding:0!important;max-width:100%!important}
+  .sg{grid-template-columns:repeat(4,1fr)!important}
+  .bg{grid-template-columns:1fr 1fr!important}
+  .mg{grid-template-columns:repeat(4,1fr)!important}
+  .mg3{grid-template-columns:repeat(3,1fr)!important}
+  .at td,.at th{padding:6px 10px!important;font-size:11px!important}
+  .itbl td,.itbl th{padding:5px 8px!important;font-size:10px!important}
+  /* Recommendations in print */
+  #prAI{page-break-before:always}
+  .pr-ai-wrap{border:1px solid #F9A825;border-radius:8px;overflow:hidden;margin-bottom:8px}
+  .pr-ai-title{background:#FFFDE7;padding:10px 14px;font-size:13px;font-weight:700;color:#E65100;border-bottom:1px solid #F9A825}
+  .pr-ai-score-row{display:flex;align-items:center;gap:14px;padding:12px 14px;border-bottom:1px solid #F5F0D8}
+  .pr-ai-score-circle{width:52px;height:52px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;font-weight:800;color:#fff;font-size:16px}
+  .pr-ai-issue{border:1px solid #eee;border-radius:6px;margin:6px 14px;overflow:hidden}
+  .pr-ai-issue-hdr{display:flex;align-items:center;gap:8px;padding:8px 12px;background:#FAFAFA;font-size:11px;font-weight:700}
+  .pr-ai-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .pr-ai-dot.red{background:#C62828}.pr-ai-dot.yel{background:#F9A825}.pr-ai-dot.grn{background:#2E7D32}
+  .pr-ai-issue-body{padding:8px 12px;font-size:10px;line-height:1.6;color:#333}
+  .pr-ai-issue-hi{color:#666;font-size:9px;line-height:1.5;margin-top:2px}
+  .pr-ai-recs{margin-top:6px}
+  .pr-ai-rec{display:flex;gap:8px;padding:4px 0;border-top:1px solid #F5F5F5;font-size:10px}
+  .pr-ai-rec-ing{font-weight:700;min-width:140px;flex-shrink:0;color:#1B4332}
+  .pr-ai-rec-act{padding:1px 6px;border-radius:3px;font-size:9px;font-weight:700;flex-shrink:0;align-self:flex-start;margin-top:1px}
+  .pr-ai-rec-why{color:#444;flex:1}
+  .pr-ai-econ{background:#E8F5E9;border:1px solid #A5D6A7;border-radius:6px;margin:6px 14px;padding:10px 12px;font-size:10px;line-height:1.6}
+  .pr-ai-prio{background:#FFF3E0;border:1px solid #FFB74D;border-radius:6px;margin:6px 14px 14px;padding:10px 12px;font-size:10px;line-height:1.6}
+  @page{margin:15mm;size:A4}
+}
+.print-header{display:none}
+.print-section{display:none}
+
+@media(max-width:768px){
+  .fg,.fg3{grid-template-columns:1fr}.stg{grid-template-columns:repeat(3,1fr)}.sg{grid-template-columns:repeat(2,1fr)}.bg{grid-template-columns:1fr}.mg,.mg3{grid-template-columns:repeat(2,1fr)}.hdr{flex-direction:column;gap:10px;text-align:center}.hdr-btns{flex-wrap:wrap;justify-content:center}.stp-l{display:none}
+  .rc-label{width:100px}.itbl{font-size:10px}
+}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.sec.act .crd{animation:fi .4s ease}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-left">
+    <div class="logo"><img src="data:image/png;base64,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" style="height:40px;width:auto;object-fit:contain" alt="Doctor Feeds"></div>
+    <div style="margin-left:12px"><h1>Doctor Feeds — Ration Balancer</h1><p>NRC Standards / राशन बैलेंसर</p></div>
+  </div>
+  <div class="hdr-btns">
+    <button class="btn btn-r" onclick="resetAll()">Reset</button>
+  </div>
+</div>
+
+<div class="prog">
+  <div class="stp act done" id="st1" onclick="goTo(1)"><div class="stp-n">1</div><span class="stp-l">Animal / पशु</span></div>
+  <div class="stp-c" id="c1"></div>
+  <div class="stp" id="st2" onclick="goTo(2)"><div class="stp-n">2</div><span class="stp-l">Feeds / चारा</span></div>
+  <div class="stp-c" id="c2"></div>
+  <div class="stp" id="st3" onclick="goTo(3)"><div class="stp-n">3</div><span class="stp-l">Formulate / राशन</span></div>
+  <div class="stp-c" id="c3"></div>
+  <div class="stp" id="st4" onclick="goTo(4)"><div class="stp-n">4</div><span class="stp-l">Report / रिपोर्ट</span></div>
+</div>
+
+<div class="ctr">
+
+<!-- STEP 1 -->
+<div class="sec act" id="s1">
+  <div class="crd"><div class="crd-h"><span style="color:#1b9a6f;font-size:10px;font-weight:900">▌</span> Customer Details / ग्राहक विवरण</div>
+    <div class="crd-b"><div class="fg">
+      <div class="fgrp"><label>Farm Name / डेयरी</label><input type="text" id="fName" placeholder="e.g., Sharma Dairy Farm"></div>
+      <div class="fgrp"><label>Owner Name / मालिक</label><input type="text" id="oName" placeholder="e.g., Rajesh Sharma"></div>
+    </div></div>
+  </div>
+  <div class="crd"><div class="crd-h"><span style="color:#1b9a6f;font-size:10px;font-weight:900">▌</span> Animal Profile / पशु प्रोफाइल</div>
+    <div class="crd-b">
+      <div class="fgrp" style="margin-bottom:16px"><label>Animal Type / पशु का प्रकार</label>
+        <div class="tgl">
+          <button class="tgl-b act" onclick="selAnimal('cow',this)">Cow / गाय</button>
+          <button class="tgl-b" onclick="selAnimal('buf',this)">Buffalo / भैंस</button>
+        </div>
+      </div>
+      <div class="fgrp" style="margin-bottom:16px"><label>Breed / नस्ल</label><div class="brg" id="brG"></div></div>
+      <div class="fgrp"><label>Lactation Stage / दुग्धकाल</label>
+        <div class="stg">
+          <button class="stg-b act" onclick="selStg(this,'early')">Early<small>प्रारंभिक (0-100)</small></button>
+          <button class="stg-b" onclick="selStg(this,'mid')">Mid<small>मध्य (100-200)</small></button>
+          <button class="stg-b" onclick="selStg(this,'late')">Late<small>अंतिम (200+)</small></button>
+          <button class="stg-b" onclick="selStg(this,'dry')">Dry<small>सूखी</small></button>
+          <button class="stg-b" onclick="selStg(this,'heifer')">Heifer<small>बछिया</small></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="crd"><div class="crd-h"><span style="color:#1b9a6f;font-size:10px;font-weight:900">▌</span> Performance & Economics / उत्पादन और अर्थशास्त्र</div>
+    <div class="crd-b"><div class="fg">
+      <div class="fgrp"><label>Body Weight (kg)</label><input type="number" id="bw" value="450" min="100" max="900"></div>
+      <div class="fgrp"><label>Milk Yield (L/day)</label><input type="number" id="my" value="25" min="0" max="60" step="0.5"></div>
+      <div class="fgrp"><label>Milk Fat (%)</label><input type="number" id="fat" value="4" min="1" max="10" step="0.1"></div>
+      <div class="fgrp"><label>SNF (%)</label><input type="number" id="snf" value="8.5" min="6" max="12" step="0.1"></div>
+      <div class="fgrp"><label>Milk Sale Price (₹/L) / दूध भाव</label><input type="number" id="mlkPrice" value="55" min="10" max="200" step="0.5"></div>
+    </div></div>
+  </div>
+  <div class="nb"><div></div><button class="bn bx" onclick="goTo(2)">Next → Choose Feeds</button></div>
+</div>
+
+<!-- STEP 2 -->
+<div class="sec" id="s2">
+  <div class="crd">
+    <div class="crd-h"><span style="color:#1b9a6f;font-size:10px;font-weight:900">▌</span> Select Ingredients / घटक चुनें
+      <span style="font-size:11px;font-weight:400;color:var(--tl);margin-left:8px">✓ Check to select &nbsp;|&nbsp; Edit ₹/kg price &nbsp;|&nbsp; Set qty below</span>
+    </div>
+    <div style="overflow:hidden">
+      <div class="ing-cat-tabs" id="ingTabs"></div>
+      <div class="ing-search-wrap">
+        <input type="text" class="ing-search-inp" id="ingSearch" placeholder="🔍 Search ingredient... / घटक खोजें..." oninput="renderIngList()">
+      </div>
+      <div class="ing-list" id="ingList"></div>
+    </div>
+  </div>
+
+  <div class="crd">
+    <div class="crd-h"><span style="color:#1b9a6f;font-size:10px;font-weight:900">▌</span> Selected Ration / चुने हुए घटक
+      <span id="selCount" style="font-size:12px;font-weight:400;color:var(--tl);margin-left:8px"></span>
+    </div>
+    <div style="padding-bottom:8px">
+      <div class="noi" id="noI"><div class="ic">🌿</div><p>No ingredients selected</p><p style="font-size:12px">ऊपर से घटक चुनें</p></div>
+      <div style="overflow-x:auto">
+        <table class="itbl" id="iT" style="display:none">
+          <thead><tr><th>Ingredient</th><th>Qty (kg/day)</th><th>DM%</th><th>CP%</th><th>TDN%</th><th>NEL Mcal</th><th>Ca%</th><th>P%</th><th>₹/kg</th><th>Cost ₹</th><th>✕</th></tr></thead>
+          <tbody id="iTB"></tbody>
+          <tfoot><tr class="trow"><td><strong>Total</strong></td><td id="tQ">0</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td id="tC">₹0</td><td></td></tr></tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="nb"><button class="bn bp" onclick="goTo(1)">← Previous</button><button class="bn bx" onclick="goTo(3)">Next → Formulate</button></div>
+</div>
+
+<!-- STEP 3 -->
+<div class="sec" id="s3">
+  <div class="sg">
+    <div class="sc g"><div class="v" id="xC">₹0</div><div class="l">Total Cost/day</div><div class="lh">कुल लागत/दिन</div></div>
+    <div class="sc o"><div class="v" id="xCL">₹0</div><div class="l">Cost/Litre</div><div class="lh">प्रति लीटर</div></div>
+    <div class="sc bl"><div class="v" id="xMk">25 L</div><div class="l">Milk/day</div><div class="lh">दूध उत्पादन</div></div>
+    <div class="sc pr"><div class="v" id="xPL">₹0</div><div class="l">Profit/Litre</div><div class="lh">प्रति लीटर मुनाफा</div></div>
+  </div>
+  <div style="text-align:right;margin:-10px 0 8px;font-size:11px;font-weight:600;color:var(--tl)"><span id="animalTypeBadge" style="color:#1b9a6f;font-weight:600">Cow NRC</span> <span style="opacity:.5">| ADF from actual ingredient data</span></div>
+
+  <!-- RATION COMPOSITION -->
+  <div class="crd" id="rcCard">
+    <div class="crd-h"><span style="color:#1b9a6f;font-size:10px;font-weight:900">▌</span> Ration Composition / राशन संरचना</div>
+    <div class="crd-b">
+      <div id="rcBars"></div>
+      <div class="rc-legend">
+        <div class="rc-leg-item"><span class="rc-leg-dot" style="background:#43A047"></span>Green Fodder</div>
+        <div class="rc-leg-item"><span class="rc-leg-dot" style="background:#FFA000"></span>Dry Fodder</div>
+        <div class="rc-leg-item"><span class="rc-leg-dot" style="background:#EF5350"></span>Concentrate</div>
+        <div class="rc-leg-item"><span class="rc-leg-dot" style="background:#7B1FA2"></span>Mineral</div>
+        <div class="rc-leg-item"><span class="rc-leg-dot" style="background:#0288D1"></span>Bypass Fat</div>
+        <div class="rc-leg-item"><span class="rc-leg-dot" style="background:#00897B"></span>Supplements</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="crd"><div class="crd-h"><span style="color:#1b9a6f;font-size:10px;font-weight:900">▌</span> Nutrient Analysis / पोषक तत्व विश्लेषण</div>
+    <div class="crd-b"><table class="at"><thead><tr><th>Nutrient / पोषक तत्व</th><th>Required</th><th>Achieved</th><th>Status</th></tr></thead><tbody id="nB"></tbody></table></div>
+  </div>
+
+  <div class="crd"><div class="crd-h"><span style="color:#1b9a6f;font-size:10px;font-weight:900">▌</span> Complete Proximate Analysis (NRC)</div>
+    <div class="crd-b"><table class="at"><thead><tr><th>Nutrient</th><th>Required</th><th>Achieved</th><th>Gap</th><th>Status</th></tr></thead><tbody id="pB"></tbody></table></div>
+  </div>
+
+  <div class="bg">
+    <div class="crd"><div class="crd-h"><span style="color:#1b9a6f;font-size:10px;font-weight:900">▌</span> Energy Balance</div>
+      <div class="crd-b" id="enBal">
+        <div class="br"><span>ME Required:</span><span id="meR">0 MJ</span></div>
+        <div class="br"><span>ME Achieved:</span><span id="meA">0 MJ</span></div>
+        <div class="br"><span>TDN Required:</span><span id="tdR">0 kg</span></div>
+        <div class="br"><span>TDN Achieved:</span><span id="tdA">0 kg</span></div>
+      </div>
+    </div>
+    <div class="crd"><div class="crd-h"><span style="color:#1b9a6f;font-size:10px;font-weight:900">▌</span> Protein Balance</div>
+      <div class="crd-b" id="prBal">
+        <div class="br"><span>CP Required:</span><span id="cpR">0 kg</span></div>
+        <div class="br"><span>CP Achieved:</span><span id="cpA">0 kg</span></div>
+        <div class="br"><span>RUP:</span><span id="ruV">0 kg</span></div>
+        <div class="br"><span>RDP:</span><span id="rdV">0 kg</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="height:8px"></div>
+  <div class="crd"><div class="crd-h"><span style="color:#1b9a6f;font-size:10px;font-weight:900">▌</span> Mineral Status / खनिज स्थिति</div>
+    <div class="crd-b" id="minCard"><div class="mg">
+      <div class="mc"><div class="ml">Calcium</div><div class="mv" id="caV">0g</div><div class="ms" id="caS">(0g जरूरत)</div></div>
+      <div class="mc"><div class="ml">Phosphorus</div><div class="mv" id="pV">0g</div><div class="ms" id="pS">(0g जरूरत)</div></div>
+      <div class="mc"><div class="ml">Ca:P Ratio</div><div class="mv" id="cpR2">0</div><div class="ms">(Ideal: 1.5-2.5)</div></div>
+      <div class="mc"><div class="ml">DCAD (mEq/day)</div><div class="mv" id="dcV">0</div><div class="ms">(Lactating: 200–400 mEq)</div></div>
+    </div></div>
+  </div>
+
+  <div class="crd"><div class="crd-h"><span style="color:#1b9a6f;font-size:10px;font-weight:900">▌</span> Fiber & Composition</div>
+    <div class="crd-b" id="fibCard"><div class="mg3">
+      <div class="mc"><div class="ml">NDF %</div><div class="mv" id="ndV">0%</div><div class="ms">(Range: 28-40%)</div></div>
+      <div class="mc"><div class="ml">ADF %</div><div class="mv" id="adV">0%</div><div class="ms">(Range: 17-25%)</div></div>
+      <div class="mc"><div class="ml">Roughage : Conc</div><div class="mv" id="rcV">0 : 0</div><div class="ms">(Ideal: 60:40)</div></div>
+    </div></div>
+  </div>
+
+  <!-- AI RECOMMENDATIONS -->
+  <div class="ai-card">
+    <div class="ai-hdr" onclick="toggleAI()">
+      <div class="ai-hdr-left">Recommendations / सुझाव <span class="ai-badge" id="aiBadge">0</span></div>
+      <span class="ai-chevron open" id="aiChev">▼</span>
+    </div>
+    <div class="ai-body open" id="aiBody">
+      <div id="aiIssues"><p style="color:var(--tl);font-size:13px;padding:8px 0">Calculate your ration first to see recommendations.</p></div>
+    </div>
+  </div>
+
+  <div class="nb"><button class="bn bp" onclick="goTo(2)">← Previous</button><button class="bn bx" onclick="goTo(4)">Next → Report</button></div>
+</div>
+
+<!-- STEP 4 -->
+<div class="sec" id="s4">
+  <div class="crd"><div class="crd-h"><span style="color:#1b9a6f;font-size:10px;font-weight:900">▌</span> Ration Report / राशन रिपोर्ट</div>
+    <div class="crd-b" style="text-align:center;padding:50px 20px">
+      <div style="font-size:50px;margin-bottom:16px">📋</div>
+      <h3 style="margin-bottom:8px">Your Ration Report is Ready!</h3>
+      <p style="color:var(--tl);margin-bottom:24px">आपकी राशन रिपोर्ट तैयार है!</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-p" onclick="generatePDF()" style="font-size:14px;padding:12px 28px;font-weight:700">PDF Report</button>
+        <button class="btn btn-w" onclick="shareWhatsApp()" style="font-size:14px;padding:12px 28px;font-weight:700">Share on WhatsApp</button>
+        <button class="btn btn-e" onclick="shareEmail()" style="font-size:14px;padding:12px 28px;font-weight:700">Send by Email</button>
+      </div>
+    </div>
+  </div>
+  <div class="nb"><button class="bn bp" onclick="goTo(3)">← Previous</button><div></div></div>
+</div>
+
+</div><!-- /ctr -->
+
+<!-- ═══ PRINT LAYOUT ═══ -->
+<div class="print-section" id="printLayout" style="display:none">
+
+  <!-- REPORT HEADER -->
+  <div class="pr-header">
+    <div class="pr-header-top">
+      <div class="pr-logo-block">
+        <img src="data:image/png;base64,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" class="pr-logo-img" alt="Doctor Feeds">
+        <div class="pr-brand-text">
+          <div class="pr-brand-name">Doctor Feeds</div>
+          <div class="pr-brand-tag">Where Care Meets Nutrition</div>
+        </div>
+      </div>
+      <div class="pr-report-title">
+        <div class="pr-title-main">Ration Balancer Report</div>
+        <div class="pr-title-sub">NRC Standards / राशन बैलेंसर रिपोर्ट</div>
+      </div>
+    </div>
+    <div class="pr-info-bar">
+      <div class="pr-info-line" id="prLine1"></div>
+      <div class="pr-info-line" id="prLine2"></div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="pr-body">
+    <div class="sg" id="prSG" style="margin-bottom:14px"></div>
+    <div class="crd" id="prRC"></div>
+    <div class="crd" id="prIT"></div>
+    <div class="crd" id="prNA"></div>
+    <div class="crd" id="prPA"></div>
+    <div class="bg" style="margin-bottom:14px" id="prBal"></div>
+    <div class="crd" id="prMin"></div>
+    <div class="crd" id="prFib"></div>
+    <div id="prAI"></div>
+  </div>
+
+</div>
+
+<script>
+/* ══ DATA ══ */
+var cowB=[{n:'HF Crossbred',h:'एचएफ संकर'},{n:'Jersey Crossbred',h:'जर्सी संकर'},{n:'Sahiwal',h:'साहीवाल'},{n:'Gir',h:'गिर'},{n:'Tharparkar',h:'थारपारकर'}];
+var bufB=[{n:'Murrah',h:'मुर्रा'},{n:'Mehsana',h:'मेहसाणा'},{n:'Nili Ravi',h:'नीली रावी'},{n:'Jaffarabadi',h:'जाफराबादी'},{n:'Upgraded',h:'अपग्रेडेड'}];
+var catColors={green:'#43A047',dry:'#FFA000',conc:'#EF5350',min:'#7B1FA2',bypass:'#0288D1',supp:'#00897B',da:'#C62828'};
+var cats=['all','da','green','dry','conc','min','bypass','supp'];
+var catLabels={all:'🌿 All / सभी',da:'🏥 Doctor Agrovet',green:'🌱 Green Fodder / हरा चारा',dry:'🌾 Dry Fodder / सूखा चारा',conc:'🌰 Concentrate / दाना',min:'💎 Mineral / मिनरल',bypass:'💧 Bypass Fat / बाईपास फैट',supp:'⚗️ Supplements / अन्य'};
+
+var DB=[
+/* ── GREEN FODDER ── */
+{n:'Azolla',h:'अज़ोला',cat:'green',dm:8,cp:25,ndf:30,adf:18,tdn:55,nel:1.2,ca:1.5,p:0.5,na:0.3,k:2.5,cl:0.5,s:0.2,pr:5},
+{n:'Bajra Green Fodder',h:'बाजरा हरा चारा',cat:'green',dm:18,cp:9,ndf:60,adf:35,tdn:60,nel:1.2,ca:0.4,p:0.3,na:0.1,k:2.0,cl:0.3,s:0.15,pr:2},
+{n:'Bajra Silage',h:'बाजरा साइलेज',cat:'green',dm:28,cp:8,ndf:55,adf:32,tdn:64,nel:1.3,ca:0.3,p:0.2,na:0.1,k:1.8,cl:0.3,s:0.12,pr:2.5},
+{n:'Berseem (Egyptian Clover)',h:'बरसीम',cat:'green',dm:15,cp:18,ndf:40,adf:24,tdn:58,nel:1.4,ca:1.8,p:0.3,na:0.2,k:3.0,cl:0.4,s:0.2,pr:3},
+{n:'Cowpea Green Fodder',h:'लोबिया हरा चारा',cat:'green',dm:18,cp:17,ndf:42,adf:26,tdn:56,nel:1.35,ca:1.2,p:0.3,na:0.1,k:2.5,cl:0.4,s:0.18,pr:3.5},
+{n:'Guinea Grass',h:'गिनी घास',cat:'green',dm:22,cp:9,ndf:65,adf:38,tdn:55,nel:1.2,ca:0.4,p:0.3,na:0.1,k:2.0,cl:0.3,s:0.15,pr:2},
+{n:'Jowar Silage',h:'ज्वार साइलेज',cat:'green',dm:30,cp:8,ndf:58,adf:34,tdn:65,nel:1.25,ca:0.3,p:0.2,na:0.1,k:1.5,cl:0.3,s:0.12,pr:2.5},
+{n:'Lucerne / Alfalfa Green',h:'रिजका हरा',cat:'green',dm:22,cp:20,ndf:38,adf:28,tdn:60,nel:1.4,ca:1.5,p:0.3,na:0.2,k:3.2,cl:0.5,s:0.25,pr:4},
+{n:'Maize Green Fodder',h:'मक्का हरा चारा',cat:'green',dm:22,cp:9,ndf:55,adf:32,tdn:62,nel:1.4,ca:0.3,p:0.2,na:0.05,k:1.8,cl:0.3,s:0.12,pr:2.5},
+{n:'Maize Silage',h:'मक्का साइलेज',cat:'green',dm:32,cp:8,ndf:68,adf:38,tdn:62,nel:1.4,ca:0.3,p:0.2,na:0.05,k:1.5,cl:0.25,s:0.1,pr:3},
+{n:'Moringa Leaves',h:'मोरिंगा पत्तियां',cat:'green',dm:22,cp:27,ndf:22,adf:15,tdn:65,nel:1.5,ca:2.0,p:0.3,na:0.1,k:1.5,cl:0.2,s:0.15,pr:8},
+{n:'Napier / Elephant Grass',h:'नेपियर/हाथी घास',cat:'green',dm:18,cp:8,ndf:68,adf:40,tdn:55,nel:1.2,ca:0.4,p:0.2,na:0.1,k:2.5,cl:0.4,s:0.15,pr:2.5},
+{n:'Oat Green Fodder',h:'जई हरा चारा',cat:'green',dm:20,cp:10,ndf:52,adf:30,tdn:58,nel:1.3,ca:0.4,p:0.3,na:0.1,k:2.2,cl:0.35,s:0.18,pr:2.5},
+{n:'Para Grass',h:'पारा घास',cat:'green',dm:20,cp:7,ndf:72,adf:42,tdn:52,nel:1.1,ca:0.4,p:0.2,na:0.1,k:2.0,cl:0.3,s:0.12,pr:2},
+{n:'Sesbania (Dhaincha)',h:'ढैंचा',cat:'green',dm:20,cp:22,ndf:42,adf:26,tdn:58,nel:1.3,ca:1.5,p:0.3,na:0.15,k:2.8,cl:0.4,s:0.2,pr:2.5},
+{n:'Sorghum / Jowar Green',h:'ज्वार हरा चारा',cat:'green',dm:20,cp:8,ndf:58,adf:34,tdn:58,nel:1.25,ca:0.3,p:0.2,na:0.1,k:1.8,cl:0.3,s:0.12,pr:2},
+{n:'Subabul (Leucaena)',h:'सुबबूल',cat:'green',dm:28,cp:24,ndf:35,adf:22,tdn:65,nel:1.5,ca:1.8,p:0.3,na:0.15,k:2.5,cl:0.35,s:0.2,pr:3},
+{n:'Sudan Grass',h:'सूडान घास',cat:'green',dm:22,cp:9,ndf:62,adf:36,tdn:54,nel:1.2,ca:0.35,p:0.25,na:0.1,k:1.8,cl:0.3,s:0.12,pr:2},
+{n:'Wheat Silage',h:'गेहूं साइलेज',cat:'green',dm:35,cp:10,ndf:55,adf:32,tdn:62,nel:1.35,ca:0.3,p:0.25,na:0.1,k:1.6,cl:0.28,s:0.12,pr:2.5},
+/* ── DRY FODDER ── */
+{n:'Berseem Hay',h:'बरसीम हे',cat:'dry',dm:88,cp:16,ndf:45,adf:30,tdn:54,nel:1.2,ca:1.5,p:0.3,na:0.15,k:2.5,cl:0.4,s:0.2,pr:15},
+{n:'Chana Chilka (Gram Husk)',h:'चना छिलका',cat:'dry',dm:90,cp:7,ndf:55,adf:36,tdn:42,nel:0.9,ca:0.3,p:0.2,na:0.05,k:1.0,cl:0.2,s:0.1,pr:12},
+{n:'Groundnut Haulms',h:'मूंगफली का भूसा',cat:'dry',dm:88,cp:12,ndf:52,adf:36,tdn:52,nel:1.1,ca:0.8,p:0.2,na:0.1,k:1.5,cl:0.3,s:0.15,pr:6},
+{n:'Lucerne Hay',h:'रिजका हे',cat:'dry',dm:88,cp:18,ndf:42,adf:28,tdn:55,nel:1.25,ca:1.3,p:0.25,na:0.2,k:2.8,cl:0.45,s:0.22,pr:12},
+{n:'Maize Stover',h:'मक्का कड़बी',cat:'dry',dm:88,cp:6,ndf:70,adf:42,tdn:55,nel:0.95,ca:0.3,p:0.15,na:0.05,k:1.2,cl:0.2,s:0.1,pr:3.5},
+{n:'Oat Hay',h:'जई हे',cat:'dry',dm:88,cp:9,ndf:58,adf:35,tdn:55,nel:1.1,ca:0.3,p:0.25,na:0.1,k:2.0,cl:0.35,s:0.18,pr:10},
+{n:'Paddy Straw',h:'धान का पुआल',cat:'dry',dm:90,cp:4,ndf:72,adf:48,tdn:40,nel:0.8,ca:0.2,p:0.1,na:0.1,k:1.5,cl:0.5,s:0.1,pr:4},
+{n:'Sorghum Stover',h:'ज्वार कड़बी',cat:'dry',dm:88,cp:5,ndf:72,adf:44,tdn:50,nel:0.9,ca:0.3,p:0.1,na:0.1,k:1.5,cl:0.3,s:0.1,pr:3},
+{n:'Sugarcane Bagasse',h:'गन्ना बगास',cat:'dry',dm:50,cp:3,ndf:78,adf:52,tdn:38,nel:0.7,ca:0.1,p:0.1,na:0.05,k:0.5,cl:0.2,s:0.1,pr:1.5},
+{n:'Sugarcane Tops',h:'गन्ने की पत्तियां',cat:'dry',dm:28,cp:6,ndf:68,adf:42,tdn:55,nel:1.1,ca:0.3,p:0.2,na:0.1,k:1.8,cl:0.3,s:0.1,pr:2},
+{n:'Wheat Straw',h:'गेहूं का भूसा',cat:'dry',dm:90,cp:4,ndf:80,adf:52,tdn:42,nel:0.85,ca:0.2,p:0.1,na:0.1,k:1.2,cl:0.4,s:0.1,pr:5},
+/* ── CONCENTRATE ── */
+{n:'Bajra Grain',h:'बाजरा दाना',cat:'conc',dm:88,cp:12,ndf:18,adf:8,tdn:83,nel:1.85,ca:0.04,p:0.3,na:0.05,k:0.4,cl:0.1,s:0.15,pr:20},
+{n:'Barley Grain',h:'जौ दाना',cat:'conc',dm:88,cp:13,ndf:20,adf:9,tdn:84,nel:1.9,ca:0.05,p:0.35,na:0.05,k:0.5,cl:0.1,s:0.18,pr:20},
+{n:'Beet Pulp (Sugar Beet Pulp)',h:'बीट पल्प',cat:'conc',dm:91,cp:10,ndf:42,adf:24,tdn:75,nel:1.65,ca:0.6,p:0.1,na:0.1,k:1.0,cl:0.2,s:0.12,pr:22},
+{n:'Branded Cattle Feed (18% CP)',h:'कैटल फीड 18%',cat:'conc',dm:90,cp:18,ndf:28,adf:16,tdn:70,nel:1.6,ca:0.8,p:0.5,na:0.3,k:0.8,cl:0.4,s:0.2,pr:26},
+{n:'Branded Cattle Feed (20% CP)',h:'कैटल फीड 20%',cat:'conc',dm:90,cp:20,ndf:25,adf:14,tdn:72,nel:1.65,ca:0.8,p:0.5,na:0.3,k:0.8,cl:0.4,s:0.2,pr:28},
+{n:'Branded Cattle Feed (22% CP)',h:'कैटल फीड 22%',cat:'conc',dm:90,cp:22,ndf:22,adf:12,tdn:74,nel:1.7,ca:0.9,p:0.5,na:0.3,k:0.8,cl:0.4,s:0.2,pr:30},
+{n:'Branded Cattle Feed (24% CP)',h:'कैटल फीड 24%',cat:'conc',dm:90,cp:24,ndf:20,adf:11,tdn:76,nel:1.75,ca:0.9,p:0.5,na:0.3,k:0.8,cl:0.4,s:0.2,pr:32},
+{n:'Chana Churi (Gram Broken)',h:'चना चूरी',cat:'conc',dm:90,cp:21,ndf:12,adf:7,tdn:75,nel:1.75,ca:0.2,p:0.3,na:0.05,k:1.1,cl:0.1,s:0.22,pr:28},
+{n:'Coconut Cake (Expeller)',h:'नारियल खली',cat:'conc',dm:90,cp:22,ndf:28,adf:16,tdn:75,nel:1.7,ca:0.2,p:0.6,na:0.1,k:1.8,cl:0.2,s:0.3,pr:28},
+{n:'Cotton Seed (Whole)',h:'बिनौला साबुत',cat:'conc',dm:90,cp:23,ndf:45,adf:28,tdn:90,nel:2.2,ca:0.15,p:0.6,na:0.05,k:1.0,cl:0.1,s:0.4,pr:25},
+{n:'Cottonseed Cake (Decort)',h:'बिनौला खली',cat:'conc',dm:90,cp:42,ndf:20,adf:14,tdn:73,nel:1.7,ca:0.2,p:1.0,na:0.05,k:1.2,cl:0.1,s:0.4,pr:30},
+{n:'DDGS (Maize)',h:'डीडीजीएस',cat:'conc',dm:90,cp:30,ndf:35,adf:18,tdn:88,nel:2.0,ca:0.1,p:0.7,na:0.2,k:0.9,cl:0.2,s:0.4,pr:28},
+{n:'Fullfat Soya (Full Fat Soybean)',h:'फुल फैट सोया',cat:'conc',dm:90,cp:38,ndf:12,adf:6,tdn:92,nel:2.1,ca:0.25,p:0.6,na:0.05,k:1.8,cl:0.05,s:0.4,pr:48},
+{n:'Groundnut Cake (Expeller)',h:'मूंगफली खली',cat:'conc',dm:90,cp:47,ndf:18,adf:10,tdn:79,nel:1.8,ca:0.2,p:0.6,na:0.05,k:1.2,cl:0.05,s:0.35,pr:45},
+{n:'Guar Meal (Korma)',h:'ग्वार कोरमा',cat:'conc',dm:90,cp:48,ndf:22,adf:12,tdn:70,nel:1.6,ca:0.4,p:0.7,na:0.05,k:1.0,cl:0.1,s:0.4,pr:26},
+{n:'Jaggery',h:'गुड़',cat:'conc',dm:85,cp:1,ndf:0,adf:0,tdn:78,nel:1.8,ca:0.4,p:0.1,na:0.1,k:1.0,cl:0.1,s:0.05,pr:40},
+{n:'Linseed Cake (Expeller)',h:'अलसी खली',cat:'conc',dm:90,cp:35,ndf:28,adf:18,tdn:78,nel:1.8,ca:0.4,p:0.9,na:0.1,k:1.2,cl:0.1,s:0.45,pr:38},
+{n:'Maize Gluten Feed',h:'मक्का ग्लूटेन फीड',cat:'conc',dm:88,cp:22,ndf:38,adf:22,tdn:75,nel:1.7,ca:0.15,p:0.7,na:0.1,k:0.8,cl:0.15,s:0.35,pr:25},
+{n:'Maize Grain',h:'मक्का दाना',cat:'conc',dm:88,cp:9,ndf:12,adf:5,tdn:88,nel:2.0,ca:0.03,p:0.28,na:0.02,k:0.4,cl:0.05,s:0.12,pr:22},
+{n:'Malt Sprouts',h:'माल्ट अंकुर',cat:'conc',dm:92,cp:26,ndf:38,adf:20,tdn:68,nel:1.5,ca:0.2,p:0.7,na:0.1,k:0.8,cl:0.15,s:0.3,pr:18},
+{n:'Molasses (Cane)',h:'गन्ने का शीरा',cat:'conc',dm:75,cp:4,ndf:0,adf:0,tdn:72,nel:1.6,ca:0.8,p:0.1,na:0.3,k:3.5,cl:0.8,s:0.5,pr:12},
+{n:'Moth Churi (Moth Bean Broken)',h:'मोठ चूरी',cat:'conc',dm:90,cp:24,ndf:18,adf:9,tdn:76,nel:1.75,ca:0.2,p:0.35,na:0.05,k:1.1,cl:0.1,s:0.2,pr:30},
+{n:'Mung Churi (Green Gram Broken)',h:'मूंग चूरी',cat:'conc',dm:90,cp:24,ndf:15,adf:8,tdn:78,nel:1.8,ca:0.15,p:0.3,na:0.05,k:1.1,cl:0.1,s:0.2,pr:32},
+{n:'Mustard Cake (Expeller)',h:'सरसों खली',cat:'conc',dm:90,cp:38,ndf:22,adf:14,tdn:74,nel:1.7,ca:0.6,p:1.0,na:0.1,k:1.2,cl:0.1,s:1.0,pr:32},
+{n:'Oat Grain',h:'जई दाना',cat:'conc',dm:88,cp:13,ndf:28,adf:14,tdn:77,nel:1.75,ca:0.08,p:0.35,na:0.05,k:0.5,cl:0.1,s:0.2,pr:22},
+{n:'Palm Kernel Cake',h:'पाम कर्नल केक',cat:'conc',dm:90,cp:16,ndf:48,adf:30,tdn:72,nel:1.65,ca:0.3,p:0.6,na:0.1,k:0.8,cl:0.15,s:0.3,pr:22},
+{n:'Rapeseed Meal',h:'रेपसीड मील',cat:'conc',dm:90,cp:38,ndf:28,adf:18,tdn:70,nel:1.6,ca:0.7,p:1.0,na:0.1,k:1.2,cl:0.1,s:0.9,pr:30},
+{n:'Rice Bran (Deoiled)',h:'चावल की भूसी (डीऑयल्ड)',cat:'conc',dm:90,cp:14,ndf:32,adf:18,tdn:62,nel:1.4,ca:0.1,p:1.5,na:0.05,k:1.2,cl:0.1,s:0.15,pr:18},
+{n:'Sesame Cake (Expeller)',h:'तिल खली',cat:'conc',dm:90,cp:42,ndf:18,adf:10,tdn:75,nel:1.75,ca:2.0,p:1.1,na:0.1,k:1.2,cl:0.1,s:0.5,pr:42},
+{n:'Sorghum Grain',h:'ज्वार दाना',cat:'conc',dm:88,cp:10,ndf:18,adf:8,tdn:84,nel:1.9,ca:0.03,p:0.3,na:0.02,k:0.4,cl:0.08,s:0.12,pr:18},
+{n:'Soybean Meal (DOC)',h:'सोयाबीन खली',cat:'conc',dm:88,cp:50,ndf:15,adf:8,tdn:84,nel:1.95,ca:0.3,p:0.65,na:0.05,k:2.0,cl:0.05,s:0.42,pr:48},
+{n:'Sunflower Cake (Expeller)',h:'सूरजमुखी खली',cat:'conc',dm:90,cp:35,ndf:30,adf:20,tdn:68,nel:1.55,ca:0.4,p:1.0,na:0.1,k:1.0,cl:0.1,s:0.5,pr:35},
+{n:'Tapioca Chips',h:'टेपिओका चिप्स',cat:'conc',dm:88,cp:3,ndf:12,adf:5,tdn:78,nel:1.8,ca:0.1,p:0.1,na:0.02,k:0.6,cl:0.1,s:0.08,pr:18},
+{n:'Urad Churi (Black Gram Broken)',h:'उड़द चूरी',cat:'conc',dm:90,cp:25,ndf:18,adf:9,tdn:77,nel:1.75,ca:0.2,p:0.35,na:0.05,k:1.1,cl:0.1,s:0.2,pr:35},
+{n:'Urea (Feed Grade)',h:'यूरिया',cat:'conc',dm:99,cp:287,ndf:0,adf:0,tdn:0,nel:0,ca:0,p:0,na:0,k:0,cl:0,s:0,pr:25},
+{n:'Wheat Bran',h:'गेहूं चोकर',cat:'conc',dm:88,cp:17,ndf:42,adf:24,tdn:70,nel:1.6,ca:0.12,p:1.15,na:0.05,k:1.2,cl:0.1,s:0.2,pr:20},
+{n:'Wheat Grain',h:'गेहूं दाना',cat:'conc',dm:88,cp:13,ndf:15,adf:7,tdn:82,nel:1.9,ca:0.05,p:0.4,na:0.02,k:0.45,cl:0.08,s:0.15,pr:24},
+/* ── MINERAL MIXTURE ── */
+{n:'Bone Meal',h:'हड्डी का चूरा',cat:'min',dm:92,cp:8,ndf:0,adf:0,tdn:15,nel:0,ca:24,p:12,na:0.1,k:0.1,cl:0.1,s:0.05,pr:30},
+{n:'Calcite Powder',h:'कैल्साइट पाउडर',cat:'min',dm:98,cp:0,ndf:0,adf:0,tdn:0,nel:0,ca:38,p:0,na:0,k:0,cl:0,s:0,pr:8},
+{n:'Chelated Mineral Mixture',h:'चेलेटेड मिनरल',cat:'min',dm:95,cp:0,ndf:0,adf:0,tdn:0,nel:0,ca:20,p:10,na:0.5,k:0.5,cl:0.5,s:0.2,pr:120},
+{n:'Common Salt',h:'साधारण नमक',cat:'min',dm:99,cp:0,ndf:0,adf:0,tdn:0,nel:0,ca:0,p:0,na:39,k:0,cl:61,s:0,pr:15},
+{n:'DCP (DiCalcium Phosphate)',h:'डाईकैल्शियम फॉस्फेट',cat:'min',dm:95,cp:0,ndf:0,adf:0,tdn:0,nel:0,ca:24,p:18,na:0,k:0,cl:0,s:0,pr:55},
+{n:'Limestone Powder',h:'चूना पत्थर पाउडर',cat:'min',dm:98,cp:0,ndf:0,adf:0,tdn:0,nel:0,ca:36,p:0,na:0,k:0,cl:0,s:0,pr:5},
+{n:'Magnesium Oxide',h:'मैग्नेशियम ऑक्साइड',cat:'min',dm:99,cp:0,ndf:0,adf:0,tdn:0,nel:0,ca:0,p:0,na:0,k:0,cl:0,s:0,pr:50},
+{n:'MCP (Mono Calcium Phosphate)',h:'मोनो कैल्शियम फॉस्फेट',cat:'min',dm:95,cp:0,ndf:0,adf:0,tdn:0,nel:0,ca:17,p:22,na:0,k:0,cl:0,s:0,pr:65},
+{n:'Mineral Mixture (Standard)',h:'मिनरल मिक्सचर',cat:'min',dm:95,cp:0,ndf:0,adf:0,tdn:0,nel:0,ca:20,p:12,na:0.5,k:0.5,cl:0.5,s:0.2,pr:45},
+{n:'Sodium Bicarbonate',h:'सोडियम बाईकार्बोनेट',cat:'min',dm:99,cp:0,ndf:0,adf:0,tdn:0,nel:0,ca:0,p:0,na:27,k:0,cl:0,s:0,pr:35},
+{n:'Sodium Chloride (Iodized)',h:'आयोडीन युक्त नमक',cat:'min',dm:99,cp:0,ndf:0,adf:0,tdn:0,nel:0,ca:0,p:0,na:39,k:0,cl:61,s:0,pr:18},
+/* ── BYPASS FAT ── */
+{n:'Bypass Fat (Ca-Soap)',h:'बाईपास फैट Ca-सोप',cat:'bypass',dm:95,cp:0,ndf:0,adf:0,tdn:180,nel:5.5,ca:8,p:0,na:0,k:0,cl:0,s:0,pr:120},
+{n:'Hydrogenated Fat',h:'हाइड्रोजनेटेड फैट',cat:'bypass',dm:99,cp:0,ndf:0,adf:0,tdn:220,nel:6.5,ca:0,p:0,na:0,k:0,cl:0,s:0,pr:100},
+{n:'Palm Fat (Fractionated)',h:'पाम फैट',cat:'bypass',dm:99,cp:0,ndf:0,adf:0,tdn:215,nel:6.4,ca:0,p:0,na:0,k:0,cl:0,s:0,pr:90},
+{n:'Prilled Fat',h:'प्रिल्ड फैट',cat:'bypass',dm:99,cp:0,ndf:0,adf:0,tdn:200,nel:6.0,ca:0,p:0,na:0,k:0,cl:0,s:0,pr:130},
+{n:'Rumen Protected Fat',h:'रूमेन प्रोटेक्टेड फैट',cat:'bypass',dm:98,cp:0,ndf:0,adf:0,tdn:185,nel:5.6,ca:5,p:0,na:0,k:0,cl:0,s:0,pr:150},
+/* ── DOCTOR AGROVET PRODUCTS ── */
+{n:'D30 (Doctor Agrovet)',h:'डी30 डॉक्टर एग्रोवेट',cat:'da',dm:90,cp:30,ndf:10,adf:5,tdn:78,nel:1.85,ca:1.0,p:0.8,na:0.3,k:0.8,cl:0.3,s:0.2,pr:50},
+{n:'DOCTOR D30 Premium',h:'डॉक्टर डी30 प्रीमियम',cat:'da',dm:90,cp:30,ndf:8,adf:4,tdn:80,nel:1.9,ca:1.2,p:0.9,na:0.3,k:0.8,cl:0.3,s:0.25,pr:65},
+{n:'DA MilkBoost Concentrate',h:'डीए मिल्कबूस्ट कॉन्सेंट्रेट',cat:'da',dm:90,cp:22,ndf:18,adf:10,tdn:76,nel:1.8,ca:1.0,p:0.7,na:0.3,k:0.8,cl:0.35,s:0.2,pr:42},
+{n:'DA BuffPower (Buffalo Special)',h:'डीए बफपावर भैंस विशेष',cat:'da',dm:90,cp:20,ndf:20,adf:11,tdn:74,nel:1.75,ca:1.0,p:0.6,na:0.3,k:0.8,cl:0.35,s:0.2,pr:38},
+{n:'DA GrowMax Heifer Feed',h:'डीए ग्रोमैक्स बछिया चारा',cat:'da',dm:90,cp:18,ndf:22,adf:12,tdn:72,nel:1.7,ca:0.9,p:0.5,na:0.25,k:0.7,cl:0.3,s:0.18,pr:34},
+{n:'DA MineralMax (Premium Mineral)',h:'डीए मिनरलमैक्स प्रीमियम',cat:'da',dm:95,cp:0,ndf:0,adf:0,tdn:0,nel:0,ca:22,p:12,na:0.8,k:0.8,cl:0.8,s:0.3,pr:95},
+{n:'DA BypassPro (Ca-Soap Fat)',h:'डीए बाईपासप्रो Ca-सोप',cat:'da',dm:96,cp:0,ndf:0,adf:0,tdn:185,nel:5.6,ca:9,p:0,na:0,k:0,cl:0,s:0,pr:115},
+{n:'DA ToxinShield',h:'डीए टॉक्सिनशील्ड',cat:'da',dm:95,cp:0,ndf:0,adf:0,tdn:0,nel:0,ca:0,p:0,na:0,k:0,cl:0,s:0,pr:140},
+{n:'DA LiverGuard',h:'डीए लिवरगार्ड',cat:'da',dm:95,cp:5,ndf:0,adf:0,tdn:0,nel:0,ca:0,p:0,na:0,k:0,cl:0,s:0,pr:200},
+{n:'DA RumenPro Yeast',h:'डीए रूमेनप्रो यीस्ट',cat:'da',dm:95,cp:45,ndf:0,adf:0,tdn:70,nel:1.7,ca:0.1,p:0.8,na:0.1,k:0.5,cl:0.1,s:0.1,pr:320},
+/* ── OTHER SUPPLEMENTS ── */
+{n:'Betaine',h:'बीटेन',cat:'supp',dm:97,cp:0,ndf:0,adf:0,tdn:0,nel:0,ca:0,p:0,na:0,k:0,cl:0,s:0,pr:280},
+{n:'DL-Methionine',h:'डीएल मेथियोनीन',cat:'supp',dm:99,cp:58,ndf:0,adf:0,tdn:70,nel:0,ca:0,p:0,na:0,k:0,cl:0,s:0,pr:520},
+{n:'Feed Enzymes (Multi)',h:'फीड एंजाइम',cat:'supp',dm:95,cp:15,ndf:0,adf:0,tdn:50,nel:0,ca:0,p:0,na:0,k:0,cl:0,s:0,pr:800},
+{n:'L-Lysine HCL',h:'एल-लाइसिन',cat:'supp',dm:98,cp:78,ndf:0,adf:0,tdn:68,nel:0,ca:0,p:0,na:0,k:0,cl:0,s:0,pr:280},
+{n:'Live Yeast (Saccharomyces)',h:'लाइव यीस्ट',cat:'supp',dm:95,cp:45,ndf:0,adf:0,tdn:70,nel:1.7,ca:0.1,p:0.8,na:0.1,k:0.5,cl:0.1,s:0.1,pr:350},
+{n:'Niacin (Vitamin B3)',h:'नियासिन',cat:'supp',dm:99,cp:0,ndf:0,adf:0,tdn:0,nel:0,ca:0,p:0,na:0,k:0,cl:0,s:0,pr:350},
+{n:'Organic Selenium',h:'ऑर्गेनिक सेलेनियम',cat:'supp',dm:95,cp:20,ndf:0,adf:0,tdn:50,nel:0,ca:0,p:0,na:0,k:0,cl:0,s:0,pr:2500},
+{n:'Organic Zinc',h:'ऑर्गेनिक जिंक',cat:'supp',dm:95,cp:15,ndf:0,adf:0,tdn:45,nel:0,ca:0,p:0,na:0,k:0,cl:0,s:0,pr:800},
+{n:'Phytase Enzyme',h:'फाइटेज एंजाइम',cat:'supp',dm:95,cp:10,ndf:0,adf:0,tdn:45,nel:0,ca:0,p:0,na:0,k:0,cl:0,s:0,pr:1200},
+{n:'Potassium Carbonate',h:'पोटेशियम कार्बोनेट',cat:'supp',dm:99,cp:0,ndf:0,adf:0,tdn:0,nel:0,ca:0,p:0,na:0,k:52,cl:0,s:0,pr:55},
+{n:'Probiotic (Multi-strain)',h:'प्रोबायोटिक',cat:'supp',dm:95,cp:20,ndf:0,adf:0,tdn:55,nel:0,ca:0,p:0,na:0,k:0,cl:0,s:0,pr:400},
+{n:'Protected Choline Chloride',h:'प्रोटेक्टेड कोलीन',cat:'supp',dm:95,cp:0,ndf:0,adf:0,tdn:0,nel:0,ca:0,p:0,na:0,k:0,cl:0,s:0,pr:380},
+{n:'Protected Methionine',h:'प्रोटेक्टेड मेथियोनीन',cat:'supp',dm:95,cp:58,ndf:0,adf:0,tdn:72,nel:0,ca:0,p:0,na:0,k:0,cl:0,s:0,pr:550},
+{n:'Rumen Buffer (Commercial)',h:'रूमेन बफर',cat:'supp',dm:98,cp:0,ndf:0,adf:0,tdn:0,nel:0,ca:0,p:0,na:0,k:0,cl:0,s:0,pr:80},
+{n:'Sodium Bicarbonate (Buffer)',h:'सोडियम बाईकार्बोनेट बफर',cat:'supp',dm:99,cp:0,ndf:0,adf:0,tdn:0,nel:0,ca:0,p:0,na:27,k:0,cl:0,s:0,pr:25},
+{n:'Toxin Binder',h:'टॉक्सिन बाइंडर',cat:'supp',dm:95,cp:0,ndf:0,adf:0,tdn:0,nel:0,ca:0,p:0,na:0,k:0,cl:0,s:0,pr:150},
+{n:'Yeast Culture',h:'यीस्ट कल्चर',cat:'supp',dm:92,cp:25,ndf:0,adf:0,tdn:65,nel:0,ca:0,p:0,na:0,k:0,cl:0,s:0,pr:180}
+];
+
+
+var aT='cow',sB='HF Crossbred',sS='early',sI=[],cCat='all';
+
+window.onload=function(){rB();buildIngTabs();renderIngList()};
+
+/* ══ STEP NAV ══ */
+function goTo(s){
+  for(var i=1;i<=4;i++){
+    document.getElementById('s'+i).className='sec'+(i===s?' act':'');
+    var st=document.getElementById('st'+i);
+    st.className='stp'+(i<s?' done':i===s?' act done':'');
+  }
+  for(var j=1;j<=3;j++)document.getElementById('c'+j).className='stp-c'+(j<s?' dn':'');
+  if(s>=3)calc();
+}
+
+/* ══ BREED ══ */
+function selAnimal(t,b){aT=t;document.querySelectorAll('.tgl-b').forEach(function(x){x.className='tgl-b'});b.className='tgl-b act';rB()}
+function rB(){
+  var br=aT==='cow'?cowB:bufB,g=document.getElementById('brG');g.innerHTML='';
+  br.forEach(function(b,i){
+    var d=document.createElement('div');d.className='brc'+(i===0?' act':'');
+    d.innerHTML=b.n+'<small>'+b.h+'</small>';
+    d.onclick=function(){sB=b.n;document.querySelectorAll('.brc').forEach(function(x){x.className='brc'});d.className='brc act'};
+    g.appendChild(d);
+  });sB=br[0].n;
+}
+function selStg(b,st){sS=st;document.querySelectorAll('.stg-b').forEach(function(x){x.className='stg-b'});b.className='stg-b act'}
+
+/* ══ INGREDIENT PANEL ══ */
+function buildIngTabs(){
+  var tabs=document.getElementById('ingTabs');tabs.innerHTML='';
+  cats.forEach(function(c){
+    var b=document.createElement('button');b.className='ict'+(c==='all'?' act':'');
+    b.textContent=catLabels[c];
+    b.onclick=function(){cCat=c;document.querySelectorAll('.ict').forEach(function(x){x.className='ict'});b.className='ict act';renderIngList()};
+    tabs.appendChild(b);
+  });
+}
+function renderIngList(){
+  var list=document.getElementById('ingList');list.innerHTML='';
+  var q=(document.getElementById('ingSearch')?document.getElementById('ingSearch').value.toLowerCase().trim():'');
+  var items=DB.filter(function(ig){
+    var catOk=cCat==='all'||ig.cat===cCat;
+    var searchOk=!q||(ig.n.toLowerCase().indexOf(q)>=0||ig.h.indexOf(q)>=0);
+    return catOk&&searchOk;
+  });
+  if(!items.length){list.innerHTML='<div class="noi" style="padding:20px"><p>No items found / कोई परिणाम नहीं</p></div>';return}
+  items.forEach(function(ig){
+    var isSel=!!sI.find(function(x){return x.e===ig.n});
+    var curPr=isSel?sI.find(function(x){return x.e===ig.n}).pr:ig.pr;
+    var id='irow_'+ig.n.replace(/[^a-z0-9]/gi,'_');
+    var col=catColors[ig.cat]||'#999';
+    var row=document.createElement('div');row.className='ing-row'+(isSel?' selected':'');row.id=id;
+    var daTag=ig.cat==='da'?'<span style="background:#eafdf7;color:#1b9a6f;border-radius:3px;font-size:9px;font-weight:700;padding:1px 5px;margin-left:4px;border:1px solid #7dcfb0">DA</span>':"";
+    row.innerHTML=
+      '<input type="checkbox" class="ing-chk"'+(isSel?' checked':'')+' onchange="toggleIng(\''+esc(ig.n)+'\',this)">'+
+      '<div style="width:8px;height:8px;background:'+col+';border-radius:50%;flex-shrink:0"></div>'+
+      '<div class="ing-info">'+
+        '<div class="ing-name">'+ig.n+daTag+' <small>/ '+ig.h+'</small></div>'+
+        '<div class="ing-nuts">'+
+          '<span class="inut">DM: '+ig.dm+'%</span>'+
+          '<span class="inut">CP: '+ig.cp+'%</span>'+
+          '<span class="inut">NDF: '+ig.ndf+'%</span>'+
+          '<span class="inut">ADF: '+ig.adf+'%</span>'+
+          '<span class="inut">TDN: '+ig.tdn+'%</span>'+
+          '<span class="inut">NEL: '+ig.nel+' Mcal</span>'+
+          '<span class="inut">Ca: '+ig.ca+'%</span>'+
+          '<span class="inut">P: '+ig.p+'%</span>'+
+        '</div>'+
+      '</div>'+
+      '<div class="ing-price-col">'+
+        '<span class="ing-price-lbl">₹/kg</span>'+
+        '<input type="number" class="ing-price-inp" value="'+curPr+'" min="0" step="0.5" onchange="updatePanelPrice(\''+esc(ig.n)+'\',this.value)" onclick="event.stopPropagation()">'+
+      '</div>';
+    list.appendChild(row);
+  });
+}
+function esc(s){return s.replace(/'/g,"\\'").replace(/"/g,'&quot;')}
+function toggleIng(name,chk){
+  var ig=DB.find(function(x){return x.n===name});if(!ig)return;
+  if(chk.checked){if(!sI.find(function(x){return x.e===name}))sI.push({n:ig.n,h:ig.h,e:ig.n,cat:ig.cat,dm:ig.dm,cp:ig.cp,ndf:ig.ndf,adf:ig.adf||0,tdn:ig.tdn,nel:ig.nel,ca:ig.ca,p:ig.p,na:ig.na||0,k:ig.k||0,cl:ig.cl||0,s:ig.s||0,pr:ig.pr,qty:1})}
+  else{sI=sI.filter(function(x){return x.e!==name})}
+  renderIngList();rIT();
+}
+function updatePanelPrice(name,val){
+  var ig=sI.find(function(x){return x.e===name});if(ig){ig.pr=parseFloat(val)||0;uTot()}
+}
+
+/* ══ SELECTED TABLE ══ */
+function remI(e){sI=sI.filter(function(x){return x.e!==e});renderIngList();rIT()}
+function uQ(e,v){var ig=sI.find(function(x){return x.e===e});if(ig){ig.qty=parseFloat(v)||0;rIT()}}
+function uPr(e,v){var ig=sI.find(function(x){return x.e===e});if(ig){ig.pr=parseFloat(v)||0;rIT()}}
+function rIT(){
+  var t=document.getElementById('iT'),ni=document.getElementById('noI'),cnt=document.getElementById('selCount');
+  if(!sI.length){t.style.display='none';ni.style.display='block';cnt.textContent='';return}
+  t.style.display='table';ni.style.display='none';cnt.textContent='('+sI.length+' selected)';
+  document.getElementById('iTB').innerHTML=sI.map(function(ig){
+    var dot='<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:'+(catColors[ig.cat]||'#999')+';margin-right:5px"></span>';
+    return '<tr>'+
+      '<td>'+dot+'<strong>'+ig.n+'</strong><br><small style="color:#aaa">'+ig.h+'</small></td>'+
+      '<td><input type="number" class="qi" value="'+ig.qty+'" min="0.1" step="0.5" onchange="uQ(\''+esc(ig.e)+'\',this.value)"></td>'+
+      '<td>'+ig.dm+'%</td><td>'+ig.cp+'%</td><td>'+ig.tdn+'%</td><td>'+ig.nel+'</td><td>'+ig.ca+'%</td><td>'+ig.p+'%</td>'+
+      '<td><input type="number" class="qip" value="'+ig.pr+'" min="0" step="0.5" onchange="uPr(\''+esc(ig.e)+'\',this.value)"></td>'+
+      '<td>₹'+(ig.qty*ig.pr).toFixed(0)+'</td>'+
+      '<td><button class="rbtn" onclick="remI(\''+esc(ig.e)+'\')">✕</button></td>'+
+    '</tr>';
+  }).join('');
+  uTot();
+}
+function uTot(){
+  var tq=0,tc=0;sI.forEach(function(ig){tq+=ig.qty;tc+=ig.qty*ig.pr});
+  document.getElementById('tQ').textContent=tq.toFixed(1);
+  document.getElementById('tC').textContent='₹'+tc.toFixed(0);
+}
+
+/* ══ CORE NUTRITION MATH — Buffalo NRC corrections + real ADF + proper DCAD ══ */
+function computeNutrition(){
+  var bw=parseFloat(document.getElementById('bw').value)||450;
+  var mk=parseFloat(document.getElementById('my').value)||25;
+  var ft=parseFloat(document.getElementById('fat').value)||4;
+  var sf=parseFloat(document.getElementById('snf').value)||8.5;
+  var mlkP=parseFloat(document.getElementById('mlkPrice').value)||55;
+  var isBuf=(aT==='buf');
+
+  var pt=(sf-0.7)*0.65,lc=sf-pt-0.7;
+  var fcm=mk*(0.4+0.15*ft);
+
+  /* ── DMI — Buffalo has lower DMI capacity (~10-12% BW DM) vs cow (14-16%) ── */
+  var dmi,nem,nelM,tNEL,meR,cpR,tdR,caR,pR;
+  if(isBuf){
+    /* NRC-style buffalo adjustments (Kearl 1982 / ICAR standards) */
+    dmi=(0.310*fcm+0.0820*Math.pow(bw,0.75))*0.844;
+    nem=0.071*Math.pow(bw,0.75);                   /* Buffalo NEm 8% lower than cow */
+    nelM=mk*(0.0929*ft+0.0547*pt+0.0395*lc)*1.05; /* Buffalo milk energy 5% higher fat correction */
+    tNEL=nem+nelM;
+    meR=tNEL/0.62;                                  /* Buffalo ME conversion efficiency slightly lower */
+    cpR=dmi*0.18;                                   /* Buffalo CP req higher: 18% DM vs cow 16% */
+    tdR=dmi*0.62;
+    caR=0.035*bw/10+mk*1.45;                       /* Buffalo Ca req higher per litre */
+    pR=0.030*bw/10+mk*1.05;
+  } else {
+    /* Cow — original NRC equations */
+    dmi=(0.372*fcm+0.0968*Math.pow(bw,0.75))*0.844;
+    nem=0.077*Math.pow(bw,0.75);
+    nelM=mk*(0.0929*ft+0.0547*pt+0.0395*lc);
+    tNEL=nem+nelM;
+    meR=tNEL/0.64;
+    cpR=dmi*0.16;
+    tdR=dmi*0.65;
+    caR=0.031*bw/10+mk*1.22;
+    pR=0.028*bw/10+mk*0.95;
+  }
+
+  var tDM=0,tCP=0,tNDF=0,tADF=0,tTDN=0,tNELa=0,tCa=0,tP=0,tCost=0,rQ=0,cQ=0;
+  /* DCAD mineral accumulators (mEq/day) */
+  var tNa_mEq=0,tK_mEq=0,tCl_mEq=0,tS_mEq=0;
+  sI.forEach(function(ig){
+    var dm=ig.qty*ig.dm/100;
+    var effCP=ig.n.indexOf('Urea')>=0?dm*(ig.cp/100)*0.65:dm*ig.cp/100;
+    tDM+=dm; tCP+=effCP; tNDF+=dm*ig.ndf/100; tADF+=dm*(ig.adf||0)/100;
+    tTDN+=dm*ig.tdn/100; tNELa+=dm*ig.nel;
+    tCa+=dm*ig.ca/100*1000; tP+=dm*ig.p/100*1000; tCost+=ig.qty*ig.pr;
+    if(ig.cat==='green'||ig.cat==='dry')rQ+=dm; else if(ig.cat==='conc'||ig.cat==='da')cQ+=dm;
+    /* DCAD = (Na/23 + K/39) - (Cl/35.5 + S/16) × 1000 mEq/kg DM */
+    var na_mEq=dm*(ig.na||0)/100/23*1000;
+    var k_mEq =dm*(ig.k ||0)/100/39*1000;
+    var cl_mEq=dm*(ig.cl||0)/100/35.5*1000;
+    var s_mEq =dm*(ig.s ||0)/100/16*1000*2; /* S is divalent */
+    tNa_mEq+=na_mEq; tK_mEq+=k_mEq; tCl_mEq+=cl_mEq; tS_mEq+=s_mEq;
+  });
+  var meA=tNELa/(isBuf?0.62:0.64);
+  var cpl=mk>0?tCost/mk:0;
+  var profitPerL=mk>0?((mk*mlkP-tCost)/mk):0;
+  var ndfP=tDM>0?tNDF/tDM*100:0;
+  var adfP=tDM>0?tADF/tDM*100:0;   /* Real ADF from DB, not estimated */
+  var rP=tDM>0?Math.round(rQ/tDM*100):0,cP=tDM>0?Math.round(cQ/tDM*100):0;
+  var caP=tP>0?tCa/tP:0;
+  /* Proper DCAD (mEq/day): positive = alkalogenic, negative = acidogenic */
+  var dcad=Math.round((tNa_mEq+tK_mEq)-(tCl_mEq+tS_mEq));
+  return {bw:bw,mk:mk,ft:ft,sf:sf,mlkP:mlkP,isBuf:isBuf,
+    dmi:dmi,nem:nem,tNEL:tNEL,meR:meR,cpR:cpR,tdR:tdR,caR:caR,pR:pR,
+    tDM:tDM,tCP:tCP,tNDF:tNDF,tADF:tADF,tTDN:tTDN,tNELa:tNELa,tCa:tCa,tP:tP,
+    tCost:tCost,cpl:cpl,profitPerL:profitPerL,meA:meA,
+    ndfP:ndfP,adfP:adfP,rP:rP,cP:cP,caP:caP,dcad:dcad};
+}
+
+/* ══ CALCULATION — renders results to DOM (step 3 view) ══ */
+function calc(){
+  if(!sI.length){
+    var rcEl=document.getElementById('rcBars');
+    if(rcEl)rcEl.innerHTML='<p style="color:var(--tl);font-size:13px">No ingredients selected. Go back to Step 2.</p>';
+    return;
+  }
+  var n=computeNutrition();
+
+  /* Helper: safe set */
+  function s(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}
+  function si(id,v){var el=document.getElementById(id);if(el)el.innerHTML=v;}
+
+  /* Summary cards */
+  s('xC','₹'+n.tCost.toFixed(0));
+  s('xCL','₹'+n.cpl.toFixed(2));
+  s('xMk',n.mk+' L');
+  var plEl=document.getElementById('xPL');
+  if(plEl){plEl.textContent=(n.profitPerL>=0?'₹':'−₹')+Math.abs(n.profitPerL).toFixed(2);plEl.style.color=n.profitPerL>=0?'#558B2F':'#C62828';}
+
+  buildRCBars();
+
+  var nut=[
+    {n:'शुष्क पदार्थ (DM)',r:n.dmi.toFixed(2)+' kg/day',a:n.tDM.toFixed(2)+' kg/day',s:n.tDM>=n.dmi},
+    {n:'कच्चा प्रोटीन (CP)',r:n.cpR.toFixed(2)+' kg/day',a:n.tCP.toFixed(2)+' kg/day',s:n.tCP>=n.cpR},
+    {n:'ऊर्जा (ME)',r:n.meR.toFixed(2)+' MJ/day',a:n.meA.toFixed(2)+' MJ/day',s:n.meA>=n.meR},
+    {n:'कुल पाचक (TDN)',r:n.tdR.toFixed(2)+' kg/day',a:n.tTDN.toFixed(2)+' kg/day',s:n.tTDN>=n.tdR},
+    {n:'कैल्शियम (Ca)',r:n.caR.toFixed(2)+' g/day',a:n.tCa.toFixed(2)+' g/day',s:n.tCa>=n.caR},
+    {n:'फास्फोरस (P)',r:n.pR.toFixed(2)+' g/day',a:n.tP.toFixed(2)+' g/day',s:n.tP>=n.pR}
+  ];
+  si('nB',nut.map(function(x){return '<tr><td>'+x.n+'</td><td>'+x.r+'</td><td>'+x.a+'</td><td><span class="sb '+(x.s?'sb-e':'sb-d')+'">'+(x.s?'अधिक':'कमी')+'</span></td></tr>'}).join(''));
+
+  var prx=[
+    {n:'Dry Matter',r:n.dmi.toFixed(2),a:n.tDM.toFixed(2),u:'kg/day'},
+    {n:'Crude Protein',r:n.cpR.toFixed(2),a:n.tCP.toFixed(2),u:'kg/day'},
+    {n:'TDN',r:n.tdR.toFixed(2),a:n.tTDN.toFixed(2),u:'kg/day'},
+    {n:'NDF',r:(n.dmi*0.30).toFixed(2),a:n.tNDF.toFixed(2),u:'kg/day'},
+    {n:'NEL',r:n.tNEL.toFixed(2),a:n.tNELa.toFixed(2),u:'Mcal/day'},
+    {n:'NEM',r:n.nem.toFixed(2),a:(n.tNELa*0.3).toFixed(2),u:'Mcal/day'}
+  ];
+  si('pB',prx.map(function(x){
+    var g=parseFloat(x.a)-parseFloat(x.r),gp=parseFloat(x.r)>0?(g/parseFloat(x.r)*100).toFixed(1):0;
+    return '<tr><td>'+x.n+'</td><td>'+x.r+' '+x.u+'</td><td>'+x.a+' '+x.u+'</td><td style="color:'+(g>=0?'#2E7D32':'#C62828')+'">'+(g>=0?'+':'')+g.toFixed(2)+' ('+gp+'%)</td><td><span class="sb '+(g>=0?'sb-e':'sb-d')+'">'+(g>=0?'अधिक':'कमी')+'</span></td></tr>';
+  }).join(''));
+
+  s('meR',n.meR.toFixed(1)+' MJ');  s('meA',n.meA.toFixed(1)+' MJ');
+  s('tdR',n.tdR.toFixed(2)+' kg');  s('tdA',n.tTDN.toFixed(2)+' kg');
+  s('cpR',n.cpR.toFixed(2)+' kg');  s('cpA',n.tCP.toFixed(2)+' kg');
+  s('ruV',(n.tCP*0.35).toFixed(2)+' kg'); s('rdV',(n.tCP*0.65).toFixed(2)+' kg');
+  s('caV',n.tCa.toFixed(1)+'g');    s('caS','('+n.caR.toFixed(1)+'g जरूरत)');
+  s('pV',n.tP.toFixed(1)+'g');      s('pS','('+n.pR.toFixed(1)+'g जरूरत)');
+  s('cpR2',n.caP.toFixed(2));
+  /* Proper DCAD from actual Na/K/Cl/S values */
+  var dcadEl=document.getElementById('dcV');
+  if(dcadEl){
+    dcadEl.textContent=n.dcad+' mEq';
+    dcadEl.style.color=n.dcad>=200&&n.dcad<=400?'#2E7D32':n.dcad<0?'#C62828':'#E65100';
+  }
+  s('ndV',n.ndfP.toFixed(1)+'%');
+  /* Real ADF display */
+  s('adV',n.adfP.toFixed(1)+'%');
+  s('rcV',n.rP+' : '+n.cP);
+  /* Animal type badge */
+  var atBadge=document.getElementById('animalTypeBadge');
+  if(atBadge)atBadge.textContent=n.isBuf?'Buffalo NRC':'Cow NRC';
+
+  buildAI(n.tDM,n.dmi,n.tCP,n.cpR,n.meA,n.meR,n.tTDN,n.tdR,n.tNDF,n.tCa,n.caR,n.tP,n.pR,n.ndfP,n.rP,n.cP);
+}
+
+/* ══ RATION COMPOSITION BARS ══ */
+function buildRCBars(){
+  var wrap=document.getElementById('rcBars');wrap.innerHTML='';
+  if(!sI.length)return;
+  var total=sI.reduce(function(s,ig){return s+ig.qty},0);
+  sI.forEach(function(ig){
+    var pct=total>0?(ig.qty/total*100):0;
+    var col=catColors[ig.cat]||'#90A4AE';
+    var row=document.createElement('div');row.className='rc-bar-row';
+    row.innerHTML=
+      '<span class="rc-label" title="'+ig.n+'">'+ig.n+'</span>'+
+      '<div class="rc-bar-bg"><div class="rc-bar-fill" style="width:'+pct.toFixed(1)+'%;background:'+col+'"></div></div>'+
+      '<span class="rc-pct">'+pct.toFixed(1)+'%</span>'+
+      '<span class="rc-kg">'+ig.qty+'kg</span>';
+    wrap.appendChild(row);
+  });
+}
+
+/* ══════════════════════════════════════════════
+   LOCAL RULE ENGINE — Zero API calls, zero cost
+   All intelligence computed from live ration data
+   ══════════════════════════════════════════════ */
+
+function buildAI(tDM,dmi,tCP,cpR,meA,meR,tTDN,tdR,tNDF,tCa,caR,tP,pR,ndfP,rP,cP){
+  var bw   = parseFloat(document.getElementById('bw').value)||450;
+  var mk   = parseFloat(document.getElementById('my').value)||25;
+  var mlkP = parseFloat(document.getElementById('mlkPrice').value)||55;
+  var tCost = sI.reduce(function(s,ig){return s+ig.qty*ig.pr},0);
+  var cpl   = mk>0?tCost/mk:0;
+  var profit= mk>0?((mk*mlkP-tCost)/mk):0;
+  var caP   = tP>0?tCa/tP:0;
+
+  var dmGap  = dmi>0  ? ((tDM -dmi )/dmi )*100 : 0;
+  var cpGap  = cpR>0  ? ((tCP -cpR )/cpR )*100 : 0;
+  var meGap  = meR>0  ? ((meA -meR )/meR )*100 : 0;
+  var tdnGap = tdR>0  ? ((tTDN-tdR )/tdR )*100 : 0;
+  var caGap  = caR>0  ? ((tCa -caR )/caR )*100 : 0;
+  var pGap   = pR>0   ? ((tP  -pR  )/pR  )*100 : 0;
+
+  function hasIng(s){ return sI.some(function(x){return x.n.toLowerCase().indexOf(s.toLowerCase())>=0}); }
+  function hasCat(c){ return sI.some(function(x){return x.cat===c}); }
+  function highestCostIng(){ return sI.slice().sort(function(a,b){return (b.qty*b.pr)-(a.qty*a.pr)})[0]; }
+  function kgNeeded_CP(){ return (Math.max(0,cpR-tCP)/0.46).toFixed(2); }
+  function kgNeeded_Energy(){ return (Math.max(0,(meR-meA)*0.64)/5.5).toFixed(2); }
+  function kgNeeded_Ca(){ return (Math.max(0,caR-tCa)/380).toFixed(3); }
+  function kgNeeded_P(){ return (Math.max(0,pR-tP)/120).toFixed(3); }
+  function kgNeeded_DM(){ return Math.max(0,((dmi-tDM)/0.20)).toFixed(1); }
+
+  /* ── Score ── */
+  var score = 100;
+  if(dmGap  < -15) score -= 18; else if(dmGap  < -5)  score -= 8;
+  if(cpGap  < -15) score -= 18; else if(cpGap  < -5)  score -= 9;
+  if(meGap  < -15) score -= 15; else if(meGap  < -5)  score -= 7;
+  if(tdnGap < -15) score -= 10; else if(tdnGap < -5)  score -= 5;
+  if(caGap  < -20) score -= 8;  else if(caGap  < -10) score -= 4;
+  if(pGap   < -20) score -= 8;  else if(pGap   < -10) score -= 4;
+  if(ndfP > 45)    score -= 8;  else if(ndfP > 42)    score -= 4;
+  if(ndfP < 25 && ndfP > 0) score -= 6;
+  if(caP < 1.2 || caP > 3.0) score -= 5;
+  if(profit < 0)   score -= 8;  else if(profit < 5)   score -= 3;
+  if(!hasCat('min') && !hasCat('bypass') && !hasCat('supp')) score -= 5;
+  score = Math.max(0, Math.min(100, Math.round(score)));
+
+  var issues = [];
+
+  /* 1. DRY MATTER */
+  if(dmGap < -5){
+    var dmDefKg = (dmi-tDM).toFixed(2);
+    var recs1 = [];
+    if(dmGap < -20){
+      recs1.push({ing:'Maize Green Fodder', action:'add', qty:kgNeeded_DM()+' kg/day',
+        en:'22% DM and high energy — adds the most bulk per rupee to bridge the '+dmDefKg+' kg DM deficit.',
+        hi:'22% DM और उच्च ऊर्जा — '+dmDefKg+' kg DM की कमी के लिए सबसे किफायती विकल्प।'});
+      recs1.push({ing:'Napier Grass / नेपियर घास', action:'add', qty:'3-5 kg/day',
+        en:'High-yield perennial — adds bulk DM cheaply without inflating feed cost.',
+        hi:'अधिक उत्पादन वाला चारा — कम कीमत पर DM बढ़ाता है।'});
+    } else {
+      recs1.push({ing:'Current roughage (increase)', action:'increase', qty:'1-2 kg/day',
+        en:'Current DM is '+tDM.toFixed(2)+' kg vs '+dmi.toFixed(2)+' kg required. Increase existing roughage by 1-2 kg/day.',
+        hi:'वर्तमान DM '+tDM.toFixed(2)+' kg है जबकि '+dmi.toFixed(2)+' kg चाहिए।'});
+    }
+    issues.push({
+      severity: dmGap < -15 ? 'critical':'warning',
+      ten: 'Dry Matter deficit: '+Math.abs(dmGap).toFixed(1)+'% below NRC (need '+dmi.toFixed(2)+' kg, have '+tDM.toFixed(2)+' kg)',
+      thi: 'शुष्क पदार्थ (DM) की कमी: NRC से '+Math.abs(dmGap).toFixed(1)+'% कम',
+      aen: 'Animal receiving '+tDM.toFixed(2)+' kg DM/day vs NRC requirement of '+dmi.toFixed(2)+' kg — a deficit of '+dmDefKg+' kg. '+(dmGap<-20?'Critical shortfall that will suppress milk yield and body condition.':'Moderate gap limiting nutrient extraction from the ration.'),
+      ahi: 'पशु को '+tDM.toFixed(2)+' kg DM/day मिल रहा है जबकि NRC '+dmi.toFixed(2)+' kg चाहता है — '+dmDefKg+' kg की कमी।',
+      recs: recs1
+    });
+  }
+
+  /* 2. CRUDE PROTEIN */
+  if(cpGap < -5){
+    var cpDefKg = (cpR-tCP).toFixed(3);
+    var recs2 = [];
+    if(!hasIng('soybean') && cpGap < -20)
+      recs2.push({ing:'Soybean Meal / सोयाबीन खली', action:'add', qty:kgNeeded_CP()+' kg/day',
+        en:'46% CP — most efficient protein. '+kgNeeded_CP()+' kg/day fills the '+cpDefKg+' kg deficit.',
+        hi:'46% CP — '+cpDefKg+' kg प्रोटीन कमी के लिए '+kgNeeded_CP()+' kg/day जोड़ें।'});
+    if(!hasIng('mustard'))
+      recs2.push({ing:'Mustard Cake / सरसों खली', action:'add', qty:(parseFloat(kgNeeded_CP())*1.3).toFixed(2)+' kg/day',
+        en:'36% CP — economical alternative to soybean meal for Indian rations.',
+        hi:'36% CP — सोयाबीन खली का किफायती विकल्प।'});
+    if(hasIng('wheat straw') || hasIng('paddy straw'))
+      recs2.push({ing:'Wheat/Paddy Straw', action:'replace', qty:'1 kg with Berseem Hay',
+        en:'Low-protein straw (3% CP) is diluting protein concentration. Replace 1 kg with Berseem Hay (14% CP).',
+        hi:'कम प्रोटीन भूसा (3% CP) प्रोटीन घनत्व कम कर रहा है। 1 kg बरसीम हे (14% CP) से बदलें।'});
+    recs2.push({ing:'Lucerne / Alfalfa / रिजका', action:'add', qty:'2-3 kg/day',
+      en:'20% CP + 1.5% Ca — dual protein and calcium benefit in one ingredient.',
+      hi:'20% CP + 1.5% Ca — एक घटक में प्रोटीन और कैल्शियम दोनों।'});
+    issues.push({
+      severity: cpGap < -15 ? 'critical':'warning',
+      ten: 'Protein (CP) deficit: '+Math.abs(cpGap).toFixed(1)+'% below NRC — '+cpDefKg+' kg/day shortfall',
+      thi: 'प्रोटीन (CP) कमी: NRC से '+Math.abs(cpGap).toFixed(1)+'% कम — '+cpDefKg+' kg/day की कमी',
+      aen: 'Current CP '+tCP.toFixed(3)+' kg/day vs '+cpR.toFixed(3)+' kg required for '+mk+'L/day. Deficit reduces milk protein%, yield, and ruminal fermentation.',
+      ahi: 'CP '+tCP.toFixed(3)+' kg/day है जबकि '+mk+' L/day के लिए '+cpR.toFixed(3)+' kg चाहिए। कमी से दूध प्रोटीन%, उत्पादन और रूमेन किण्वन प्रभावित होता है।',
+      recs: recs2
+    });
+  }
+
+  /* 3. ENERGY */
+  if(meGap < -5){
+    var meDefMJ = (meR-meA).toFixed(1);
+    var recs3 = [];
+    if(meGap < -25){
+      recs3.push({ing:'Bypass Fat / बाईपास फैट', action:'add', qty:kgNeeded_Energy()+' kg/day',
+        en:'35+ MJ/kg — highest energy density. '+kgNeeded_Energy()+' kg closes the '+meDefMJ+' MJ gap without adding ration volume.',
+        hi:'35+ MJ/kg — '+kgNeeded_Energy()+' kg से '+meDefMJ+' MJ की कमी पूरी होगी।'});
+      recs3.push({ing:'Maize Grain / मक्का दाना', action:'add', qty:'1-2 kg/day',
+        en:'82% TDN, 1.9 Mcal NEL/kg — most economical grain energy for Indian dairy.',
+        hi:'82% TDN, 1.9 Mcal NEL/kg — सबसे किफायती अनाज ऊर्जा स्रोत।'});
+    } else {
+      recs3.push({ing:'Molasses / शीरा', action:'add', qty:'0.5-1 kg/day',
+        en:'68% TDN — quick fermentable energy, palatable, low cost, boosts rumen microbial activity.',
+        hi:'68% TDN — शीघ्र किण्वनीय ऊर्जा, स्वादिष्ट, कम लागत।'});
+      recs3.push({ing:'Rice Polish / चावल की भूसी', action:'add', qty:'0.5-1 kg/day',
+        en:'70% TDN at low price — adds energy without disrupting fiber balance.',
+        hi:'कम कीमत पर 70% TDN — फाइबर संतुलन बिगाड़े बिना ऊर्जा जोड़ता है।'});
+    }
+    if(hasIng('wheat straw') || hasIng('paddy straw'))
+      recs3.push({ing:'Wheat/Paddy Straw', action:'replace', qty:'1 kg with Berseem Hay',
+        en:'Replacing 1 kg straw (TDN ~40%) with berseem hay (TDN ~55%) adds ~150g TDN per kg exchanged.',
+        hi:'1 kg भूसे (TDN ~40%) को बरसीम हे (TDN ~55%) से बदलने पर ~150g TDN बढ़ता है।'});
+    issues.push({
+      severity: meGap < -20 ? 'critical':'warning',
+      ten: 'Energy deficit: '+Math.abs(meGap).toFixed(1)+'% below NRC — '+meDefMJ+' MJ/day shortfall',
+      thi: 'ऊर्जा की कमी: NRC से '+Math.abs(meGap).toFixed(1)+'% कम — '+meDefMJ+' MJ/day की कमी',
+      aen: 'ME achieved '+meA.toFixed(1)+' MJ/day vs '+meR.toFixed(1)+' MJ required. Energy deficiency causes reduced milk yield; the cow will mobilise body fat, reducing body condition score.',
+      ahi: 'प्राप्त ME '+meA.toFixed(1)+' MJ/day बनाम '+meR.toFixed(1)+' MJ की जरूरत। कमी से दूध उत्पादन कम और शरीर की चर्बी घटती है।',
+      recs: recs3
+    });
+  }
+
+  /* 4. HIGH NDF */
+  if(ndfP > 42){
+    var ndfEx = (ndfP-38).toFixed(1);
+    var highNDF = sI.filter(function(x){return x.ndf>65}).sort(function(a,b){return b.ndf-a.ndf});
+    var recs4 = [];
+    if(highNDF.length)
+      recs4.push({ing:highNDF[0].n, action:'reduce', qty:'1-2 kg/day',
+        en:'NDF is '+ndfP.toFixed(1)+'% vs ideal 28-40%. This ingredient has '+highNDF[0].ndf+'% NDF — top contributor. Reduce by 1-2 kg.',
+        hi:'NDF '+ndfP.toFixed(1)+'% है — आदर्श 28-40%। इस घटक में '+highNDF[0].ndf+'% NDF है — सबसे बड़ा योगदानकर्ता।'});
+    recs4.push({ing:'Maize Grain / मक्का दाना', action:'add', qty:'0.5-1 kg/day',
+      en:'Only 12% NDF — adding concentrate lowers overall NDF% while boosting energy.',
+      hi:'केवल 12% NDF — दाना जोड़ने से NDF% कम होता है और ऊर्जा बढ़ती है।'});
+    if(hasIng('wheat straw') || hasIng('paddy straw'))
+      recs4.push({ing:'Wheat/Paddy Straw', action:'replace', qty:'with Berseem or Lucerne Hay',
+        en:'Straw NDF 75-78%. Legume hay (NDF 40-45%) reduces fiber load while improving protein simultaneously.',
+        hi:'भूसा NDF 75-78%। लेगुम हे (NDF 40-45%) फाइबर कम करता है और प्रोटीन बढ़ाता है।'});
+    issues.push({
+      severity: ndfP > 50 ? 'critical':'warning',
+      ten: 'Excess Fiber (NDF): '+ndfP.toFixed(1)+'% of DM — ideal is 28-40%',
+      thi: 'अधिक रेशा (NDF): DM का '+ndfP.toFixed(1)+'% — आदर्श 28-40%',
+      aen: 'NDF at '+ndfP.toFixed(1)+'% is '+ndfEx+' points above the 38% ideal. High NDF physically fills the rumen, limits DMI, suppresses milk yield, and slows passage rate.',
+      ahi: 'NDF '+ndfP.toFixed(1)+'% — आदर्श 38% से '+ndfEx+' प्रतिशत अधिक। अधिक NDF रूमेन को भरता है और DMI व दूध उत्पादन सीमित करता है।',
+      recs: recs4
+    });
+  }
+
+  /* 5. LOW NDF */
+  if(ndfP < 25 && ndfP > 0){
+    issues.push({
+      severity:'warning',
+      ten: 'Low Fiber (NDF): '+ndfP.toFixed(1)+'% — rumen acidosis risk',
+      thi: 'कम रेशा (NDF): '+ndfP.toFixed(1)+'% — रूमेन एसिडोसिस का खतरा',
+      aen: 'NDF '+ndfP.toFixed(1)+'% is '+(28-ndfP).toFixed(1)+' points below the 28% minimum. Insufficient fiber reduces rumination, saliva production, and risks SARA — impairs fat and protein synthesis.',
+      ahi: 'NDF '+ndfP.toFixed(1)+'% न्यूनतम 28% से '+(28-ndfP).toFixed(1)+'% कम है। रूमेन एसिडोसिस का खतरा है।',
+      recs: [
+        {ing:'Wheat Straw / गेहूं भूसा', action:'add', qty:'1-2 kg/day', en:'Adds effective fiber. Even 1 kg increases chewing time and saliva to buffer rumen pH.', hi:'1 kg भूसा भी चबाने का समय और लार बढ़ाता है।'},
+        {ing:'Concentrate total', action:'reduce', qty:'10-15%', en:'Ration is too concentrate-heavy. Reduce grain by 10-15% and replace with roughage to restore rumen health.', hi:'राशन में बहुत अधिक दाना है। 10-15% कम करें और चारे से बदलें।'}
+      ]
+    });
+  }
+
+  /* 6. CALCIUM */
+  if(caGap < -10){
+    var caDefG = (caR-tCa).toFixed(1);
+    var recs6 = [];
+    recs6.push({ing:'Calcite Powder / कैल्साइट', action:'add', qty:kgNeeded_Ca()+' kg/day (='+(parseFloat(kgNeeded_Ca())*1000).toFixed(0)+'g)',
+      en:'38% Ca — cheapest source. '+(parseFloat(kgNeeded_Ca())*1000).toFixed(0)+'g/day fills '+caDefG+'g Ca deficit at minimal cost.',
+      hi:'38% Ca — सबसे सस्ता स्रोत। '+(parseFloat(kgNeeded_Ca())*1000).toFixed(0)+'g/day से '+caDefG+'g की कमी पूरी होती है।'});
+    if(!hasIng('mineral') && !hasIng('Mineral'))
+      recs6.push({ing:'Mineral Mixture / मिनरल मिक्सचर', action:'add', qty:'50-80 g/day',
+        en:'Balanced Ca, P, Mg and trace elements — essential if no mineral is currently in ration.',
+        hi:'संतुलित Ca, P, Mg और ट्रेस तत्व — अगर कोई मिनरल नहीं है तो जरूरी।'});
+    if(!hasIng('berseem') && !hasIng('lucerne'))
+      recs6.push({ing:'Berseem or Lucerne / बरसीम या रिजका', action:'add', qty:'2-3 kg/day',
+        en:'1.5-1.8% Ca in DM from leguminous fodder — raises Ca and CP simultaneously.',
+        hi:'DM में 1.5-1.8% Ca — Ca और CP दोनों एक साथ बढ़ते हैं।'});
+    issues.push({
+      severity: caGap < -25 ? 'critical':'warning',
+      ten: 'Calcium deficit: '+Math.abs(caGap).toFixed(1)+'% below NRC — '+caDefG+'g/day shortfall',
+      thi: 'कैल्शियम की कमी: NRC से '+Math.abs(caGap).toFixed(1)+'% कम — '+caDefG+'g/day की कमी',
+      aen: 'Ca achieved '+tCa.toFixed(1)+'g/day vs '+caR.toFixed(1)+'g required. Each litre of milk removes ~1.22g Ca. Chronic deficit causes milk fever risk, bone weakness, and poor fertility.',
+      ahi: 'Ca '+tCa.toFixed(1)+'g/day बनाम '+caR.toFixed(1)+'g की जरूरत। प्रति लीटर दूध ~1.22g Ca शरीर से निकलता है। कमी से मिल्क फीवर, हड्डी कमजोरी।',
+      recs: recs6
+    });
+  }
+
+  /* 7. PHOSPHORUS */
+  if(pGap < -10){
+    var pDefG = (pR-tP).toFixed(1);
+    var recs7 = [];
+    recs7.push({ing:'Mineral Mixture / मिनरल मिक्सचर', action:'add', qty:kgNeeded_P()+' kg/day (='+(parseFloat(kgNeeded_P())*1000).toFixed(0)+'g)',
+      en:'12% P — '+(parseFloat(kgNeeded_P())*1000).toFixed(0)+'g/day fills '+pDefG+'g P deficit and covers other macro minerals.',
+      hi:'12% P — '+(parseFloat(kgNeeded_P())*1000).toFixed(0)+'g/day से '+pDefG+'g की कमी पूरी होती है।'});
+    recs7.push({ing:'Wheat Bran / गेहूं चोकर', action:'add', qty:'0.5-1 kg/day',
+      en:'1.15% P in DM — affordable phosphorus that also adds energy and protein.',
+      hi:'DM में 1.15% P — किफायती फास्फोरस जो ऊर्जा और प्रोटीन भी देता है।'});
+    issues.push({
+      severity: pGap < -25 ? 'critical':'warning',
+      ten: 'Phosphorus deficit: '+Math.abs(pGap).toFixed(1)+'% below NRC — '+pDefG+'g/day shortfall',
+      thi: 'फास्फोरस की कमी: NRC से '+Math.abs(pGap).toFixed(1)+'% कम — '+pDefG+'g/day की कमी',
+      aen: 'P achieved '+tP.toFixed(1)+'g/day vs '+pR.toFixed(1)+'g required. P deficiency causes reduced appetite, bone weakness, delayed estrus, and poor yield — common in Indian roughage-heavy rations.',
+      ahi: 'P '+tP.toFixed(1)+'g/day बनाम '+pR.toFixed(1)+'g की जरूरत। भूख कम, हड्डी कमजोर, मद देर से — भारतीय चारा-प्रधान राशन में आम।',
+      recs: recs7
+    });
+  }
+
+  /* 8. Ca:P RATIO */
+  if(caP > 0 && (caP < 1.2 || caP > 3.0)){
+    issues.push({
+      severity:'warning',
+      ten: 'Ca:P Ratio imbalanced: '+caP.toFixed(2)+' (ideal 1.5-2.5)',
+      thi: 'Ca:P अनुपात असंतुलित: '+caP.toFixed(2)+' (आदर्श 1.5-2.5)',
+      aen: caP<1.2 ? 'Ca:P of '+caP.toFixed(2)+' is too low. Excess P relative to Ca impairs calcium absorption and can cause urinary calculi.' : 'Ca:P of '+caP.toFixed(2)+' is too high. Excess Ca blocks P absorption, worsening any existing phosphorus deficit.',
+      ahi: caP<1.2 ? 'Ca:P अनुपात '+caP.toFixed(2)+' बहुत कम है। अतिरिक्त P कैल्शियम अवशोषण बाधित करता है।' : 'Ca:P '+caP.toFixed(2)+' बहुत अधिक है। अतिरिक्त Ca फास्फोरस अवशोषण रोकता है।',
+      recs: caP<1.2 ? [{ing:'Calcite Powder', action:'add', qty:'50-100 g/day', en:'Raise Ca without more P to restore ratio toward 1.5:1.', hi:'P बढ़ाए बिना Ca बढ़ाएं।'}]
+                    : [{ing:'Mineral Mixture', action:'add', qty:'30-50 g/day', en:'Increase P intake to bring ratio back toward 2:1.', hi:'P बढ़ाने के लिए मिनरल मिक्स जोड़ें।'}]
+    });
+  }
+
+  /* 9. NO MINERAL */
+  if(!hasCat('min') && !hasCat('bypass') && !hasCat('supp')){
+    issues.push({
+      severity:'warning',
+      ten: 'No mineral supplement in ration',
+      thi: 'राशन में कोई खनिज सप्लीमेंट नहीं',
+      aen: 'No mineral/premix ingredient present. Indian roughages are universally deficient in trace elements (Cu, Zn, Se, I, Mn) critical for immunity, reproduction, and milk quality — invisible in NRC macro calculations.',
+      ahi: 'कोई मिनरल/प्रीमिक्स नहीं। भारतीय चारे में Cu, Zn, Se, I, Mn की कमी होती है — रोग प्रतिरोध, प्रजनन और दूध गुणवत्ता के लिए जरूरी।',
+      recs: [
+        {ing:'Mineral Mixture / मिनरल मिक्सचर', action:'add', qty:'50-80 g/day', en:'Covers Ca, P, Mg and all trace elements in one daily supplement.', hi:'Ca, P, Mg और सभी ट्रेस तत्व एक दैनिक सप्लीमेंट में।'},
+        {ing:'Chelated Mineral / चेलेटेड मिनरल', action:'consider', qty:'30-50 g/day', en:'Higher bioavailability — especially beneficial for high producers above 20L/day.', hi:'अधिक जैव उपलब्धता — 20L/day से अधिक उत्पादन के लिए विशेष लाभदायक।'}
+      ]
+    });
+  }
+
+  /* 10. HIGH CONCENTRATE RATIO */
+  if(cP > 50 && hasCat('conc')){
+    issues.push({
+      severity:'warning',
+      ten: 'High concentrate ratio: '+rP+':'+cP+' (ideal min 50:50, best 60:40)',
+      thi: 'दाने का अनुपात अधिक: '+rP+':'+cP+' (आदर्श 60:40)',
+      aen: 'Only '+rP+'% DM from roughage, '+cP+'% from concentrate. High-concentrate rations acidify the rumen (SARA risk), reduce butterfat, and increase cost unnecessarily.',
+      ahi: 'DM में केवल '+rP+'% चारा, '+cP+'% दाना। अधिक दाने से रूमेन अम्लीय, बटरफैट कम और लागत बढ़ती है।',
+      recs: [
+        {ing:'Any quality roughage', action:'increase', qty:'to reach 50%+ DM from roughage', en:'Add green/dry roughage — priority: Berseem or Lucerne which add protein simultaneously.', hi:'हरा/सूखा चारा बढ़ाएं — बरसीम या रिजका प्राथमिकता दें जो प्रोटीन भी देते हैं।'},
+        {ing:'Concentrate total', action:'reduce', qty:'10-15%', en:'Reducing grain 10-15% and replacing with quality roughage restores rumen health without significant yield loss.', hi:'10-15% दाना कम करें, चारे से बदलें — अच्छी गुणवत्ता के चारे से दूध में खास कमी नहीं।'}
+      ]
+    });
+  }
+
+  /* ── Economics ── */
+  var econEn, econHi, prioEn, prioHi;
+  if(profit < 0){
+    var hc = highestCostIng();
+    econEn = 'Feed cost \u20b9'+tCost.toFixed(0)+'/day vs milk revenue \u20b9'+(mk*mlkP).toFixed(0)+' — LOSS of \u20b9'+Math.abs(profit*mk).toFixed(0)+'/day (\u20b9'+Math.abs(profit).toFixed(2)+'/L). Costliest ingredient: '+(hc?hc.n+' at \u20b9'+(hc.qty*hc.pr).toFixed(0)+'/day':'N/A')+'.';
+    econHi = '\u20b9'+tCost.toFixed(0)+'/day चारा लागत बनाम \u20b9'+(mk*mlkP).toFixed(0)+' दूध राजस्व — \u20b9'+Math.abs(profit*mk).toFixed(0)+'/day नुकसान।';
+    issues.push({
+      severity:'critical',
+      ten: 'Ration is unprofitable — LOSS of \u20b9'+Math.abs(profit).toFixed(2)+'/litre',
+      thi: 'राशन घाटे में — \u20b9'+Math.abs(profit).toFixed(2)+'/लीटर नुकसान',
+      aen: 'Total feed cost \u20b9'+tCost.toFixed(0)+'/day exceeds milk revenue \u20b9'+(mk*mlkP).toFixed(0)+'/day. Break-even feed cost at \u20b9'+mlkP+'/L milk is \u20b9'+(mk*mlkP).toFixed(0)+'/day.',
+      ahi: 'चारा लागत \u20b9'+tCost.toFixed(0)+'/day दूध राजस्व \u20b9'+(mk*mlkP).toFixed(0)+'/day से अधिक है।',
+      recs: (function(){
+        var r2=[];
+        var hc2=highestCostIng();
+        if(hc2) r2.push({ing:hc2.n, action:'review', qty:'\u20b9'+(hc2.qty*hc2.pr).toFixed(0)+'/day cost', en:'Highest daily cost. Evaluate if a cheaper ingredient can deliver equivalent nutrition.', hi:'सबसे महंगा घटक। सस्ते विकल्प की जांच करें।'});
+        r2.push({ing:'Mustard Cake vs Soybean Meal', action:'consider', qty:'Replace if using Soybean', en:'\u20b932/kg (36% CP) vs \u20b948/kg (46% CP) — mustard cake is 25% cheaper per unit protein.', hi:'\u20b932/kg पर 36% CP — सोयाबीन खली से 25% सस्ता प्रोटीन।'});
+        return r2;
+      })()
+    });
+    prioEn = 'URGENT: Ration is losing \u20b9'+Math.abs(profit).toFixed(2)+'/litre. Immediately review '+(highestCostIng()?highestCostIng().n:'costliest ingredient')+' and substitute a cheaper equivalent.';
+    prioHi = 'तुरंत: \u20b9'+Math.abs(profit).toFixed(2)+'/लीटर नुकसान। '+(highestCostIng()?highestCostIng().n:'महंगे घटक')+' को सस्ते विकल्प से बदलें।';
+  } else if(profit < 8){
+    econEn = 'Thin margin of \u20b9'+profit.toFixed(2)+'/L (feed cost \u20b9'+cpl.toFixed(2)+'/L vs milk \u20b9'+mlkP+'/L). Fix nutrient deficits to increase yield and improve margins.';
+    econHi = '\u20b9'+profit.toFixed(2)+'/L का कम मार्जिन। पोषक कमियाँ सुधारें — उत्पादन बढ़ेगा और मार्जिन बेहतर होगा।';
+    prioEn = issues.length>0 ? issues[0].ten : 'Review ingredient prices and negotiate bulk purchase discounts.';
+    prioHi = issues.length>0 ? issues[0].thi : 'घटकों की कीमतें देखें और थोक खरीद पर छूट लें।';
+  } else {
+    econEn = 'Good margin \u20b9'+profit.toFixed(2)+'/L (feed \u20b9'+cpl.toFixed(2)+'/L). Daily profit: \u20b9'+(profit*mk).toFixed(0)+'. '+(issues.length===0?'Maintain this ration.':'Address remaining deficits to improve yield further.');
+    econHi = '\u20b9'+profit.toFixed(2)+'/L अच्छा मार्जिन। दैनिक मुनाफा: \u20b9'+(profit*mk).toFixed(0)+'। '+(issues.length===0?'यह राशन बनाए रखें।':'शेष कमियाँ दूर करें।');
+    prioEn = issues.length>0 ? issues[0].ten : 'Ration balanced and profitable. Monitor ingredient prices regularly.';
+    prioHi = issues.length>0 ? issues[0].thi : 'राशन संतुलित और लाभदायक। घटकों की कीमतें नियमित देखें।';
+  }
+
+  renderAIResult(score, issues, econEn, econHi, prioEn, prioHi);
+}
+
+/* ══ RENDER ENGINE ══ */
+function renderAIResult(score, issues, econEn, econHi, prioEn, prioHi){
+  var cont = document.getElementById('aiIssues');
+  cont.innerHTML = '';
+  var critCount = issues.filter(function(i){return i.severity==='critical'}).length;
+  var warnCount = issues.filter(function(i){return i.severity==='warning'}).length;
+  document.getElementById('aiBadge').textContent = critCount+warnCount;
+
+  var scoreColor = score>=80?'#2E7D32':score>=60?'#E65100':'#C62828';
+  var scoreLabel = score>=80?'Excellent / उत्कृष्ट':score>=65?'Good / अच्छा':score>=50?'Needs Improvement / सुधार करें':'Poor / खराब';
+  var od = document.createElement('div');
+  od.style.cssText='display:flex;align-items:center;gap:16px;padding:4px 4px 16px;border-bottom:1px solid #F0E8C8;margin-bottom:14px;flex-wrap:wrap';
+  od.innerHTML=
+    '<div style="width:64px;height:64px;border-radius:50%;background:'+scoreColor+';display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 3px 10px rgba(0,0,0,.2)">'+
+      '<span style="font-size:20px;font-weight:800;color:#fff;line-height:1">'+score+'</span>'+
+      '<span style="font-size:8px;color:rgba(255,255,255,.8)">/100</span>'+
+    '</div>'+
+    '<div style="flex:1;min-width:200px">'+
+      '<div style="font-size:15px;font-weight:700;color:'+scoreColor+'">'+scoreLabel+'</div>'+
+      '<div style="font-size:11px;color:var(--tl);margin-top:3px">'+
+        (critCount>0?'<span style="color:#C62828;font-weight:600">\u25cf '+critCount+' Critical &nbsp;</span>':'<span style="color:#2E7D32">\u2713 No critical issues &nbsp;</span>')+
+        (warnCount>0?'<span style="color:#E65100;font-weight:600">\u25cf '+warnCount+' Warning</span>':'')+
+      '</div>'+
+    '</div>';
+  cont.appendChild(od);
+
+  if(!issues.length){
+    var ok=document.createElement('div');
+    ok.style.cssText='text-align:center;padding:20px;color:#2E7D32;font-weight:600;font-size:13px';
+    ok.textContent='\u2705 All nutrients balanced! Excellent ration.';
+    cont.appendChild(ok);
+  }
+
+  issues.forEach(function(issue,idx){
+    var dot=issue.severity==='critical'?'red':issue.severity==='warning'?'yel':'grn';
+    var bId='aib'+idx;
+    var div=document.createElement('div');div.className='ai-issue';
+    var rHTML=(issue.recs||[]).map(function(rec){
+      var aC=rec.action==='reduce'?'#C62828':rec.action==='replace'?'#0277BD':rec.action==='consider'?'#6A1B9A':'#1B5E20';
+      return '<div class="ai-rec-row">'+
+        '<div class="ai-rec-top"><span class="ai-rec-ing">'+rec.ing+'</span>'+
+        '<span class="ai-rec-action" style="background:'+aC+'18;color:'+aC+'">'+rec.action.toUpperCase()+(rec.qty?' \u00b7 '+rec.qty:'')+'</span></div>'+
+        '<div class="ai-rec-why">'+rec.en+'</div>'+
+        '<div class="ai-rec-why-hi">'+rec.hi+'</div></div>';
+    }).join('');
+    div.innerHTML=
+      '<div class="ai-issue-hdr" onclick="toggleAIIssue(\''+bId+'\')">'+
+        '<span class="ai-dot '+dot+'"></span>'+
+        '<div style="flex:1"><div style="font-size:13px;font-weight:700">'+issue.ten+'</div>'+
+        '<div style="font-size:11px;color:var(--tl);font-weight:500;margin-top:1px">'+issue.thi+'</div></div>'+
+        '<span class="ai-chevron2'+(idx===0?' open':'')+'" id="chev'+bId+'">\u25bc</span>'+
+      '</div>'+
+      '<div class="ai-issue-body'+(idx===0?' open':'')+'" id="'+bId+'">'+
+        '<p style="font-size:12px;color:var(--t);margin-bottom:4px;line-height:1.7">'+issue.aen+'</p>'+
+        '<p style="font-size:11px;color:var(--tl);margin-bottom:12px;line-height:1.6">'+issue.ahi+'</p>'+
+        (rHTML?'<div class="ai-sub">Recommendations / \u0938\u0941\u091d\u093e\u0935</div>'+rHTML:'')+
+      '</div>';
+    cont.appendChild(div);
+  });
+
+  var econ=document.createElement('div');
+  econ.style.cssText='margin-top:14px;background:#E8F5E9;border:1px solid #A5D6A7;border-radius:8px;padding:14px 16px';
+  econ.innerHTML='<div style="font-size:12px;font-weight:700;color:#1B5E20;margin-bottom:5px">\ud83d\udcb0 Economic Insight / \u0906\u0930\u094d\u0925\u093f\u0915 \u0935\u093f\u0936\u094d\u0932\u0947\u0937\u0923</div>'+
+    '<div style="font-size:12px;color:#2E7D32;line-height:1.6;margin-bottom:4px">'+econEn+'</div>'+
+    '<div style="font-size:11px;color:#388E3C;line-height:1.5">'+econHi+'</div>';
+  cont.appendChild(econ);
+
+  var prio=document.createElement('div');
+  prio.style.cssText='margin-top:10px;background:#FFF3E0;border:1px solid #FFB74D;border-radius:8px;padding:14px 16px';
+  prio.innerHTML='<div style="font-size:12px;font-weight:700;color:#E65100;margin-bottom:5px">\u26a1 Priority Action / \u0924\u0941\u0930\u0902\u0924 \u0915\u0930\u0947\u0902</div>'+
+    '<div style="font-size:13px;font-weight:600;color:#BF360C;line-height:1.6;margin-bottom:4px">'+prioEn+'</div>'+
+    '<div style="font-size:11px;color:#E65100;line-height:1.5">'+prioHi+'</div>';
+  cont.appendChild(prio);
+}
+
+function toggleAI(){
+  var b=document.getElementById('aiBody'),c=document.getElementById('aiChev'),o=b.className.indexOf('open')>=0;
+  b.className='ai-body'+(o?'':' open');c.className='ai-chevron'+(o?'':' open');
+}
+function toggleAIIssue(id){
+  var b=document.getElementById(id),c=document.getElementById('chev'+id),o=b.className.indexOf('open')>=0;
+  b.className='ai-issue-body'+(o?'':' open');c.className='ai-chevron2'+(o?'':' open');
+}
+
+/* ══ RESET ══ */
+function resetAll(){if(confirm('Reset all data?')){sI=[];rIT();renderIngList();goTo(1)}}
+
+/* ══ SAVE — Zoho Creator API integration ══ */
+function saveRation(){
+  if(!sI.length){alert('Please formulate a ration before saving.');return}
+  var n=computeNutrition();
+  var farm=document.getElementById('fName').value||'';
+  var owner=document.getElementById('oName').value||'';
+  var now=new Date().toISOString();
+  var rationData={
+    Farm_Name: farm,
+    Owner_Name: owner,
+    Animal_Type: aT==='buf'?'Buffalo':'Cow',
+    Breed: sB,
+    Stage: sS,
+    Body_Weight: n.bw,
+    Milk_Yield: n.mk,
+    Fat_Percent: n.ft,
+    SNF_Percent: n.sf,
+    Milk_Price: n.mlkP,
+    Total_Cost: n.tCost.toFixed(2),
+    Cost_Per_Litre: n.cpl.toFixed(2),
+    Profit_Per_Litre: n.profitPerL.toFixed(2),
+    DM_Required: n.dmi.toFixed(2),
+    DM_Achieved: n.tDM.toFixed(2),
+    CP_Required: n.cpR.toFixed(2),
+    CP_Achieved: n.tCP.toFixed(2),
+    ME_Required: n.meR.toFixed(1),
+    ME_Achieved: n.meA.toFixed(1),
+    NDF_Percent: n.ndfP.toFixed(1),
+    ADF_Percent: n.adfP.toFixed(1),
+    DCAD: n.dcad,
+    Ca_Required: n.caR.toFixed(1),
+    Ca_Achieved: n.tCa.toFixed(1),
+    P_Required: n.pR.toFixed(1),
+    P_Achieved: n.tP.toFixed(1),
+    CaP_Ratio: n.caP.toFixed(2),
+    Roughage_Percent: n.rP,
+    Concentrate_Percent: n.cP,
+    Ingredients_JSON: JSON.stringify(sI.map(function(ig){return{name:ig.n,qty:ig.qty,price:ig.pr,cost:(ig.qty*ig.pr).toFixed(0)}})),
+    Saved_On: now
+  };
+
+  /* ── Zoho Creator API ── */
+  if(typeof ZOHO!=='undefined'&&ZOHO.CREATOR){
+    ZOHO.CREATOR.init().then(function(){
+      var config={
+        appName: 'doctor-agrovet',
+        formName: 'Ration_History',
+        data: rationData
+      };
+      ZOHO.CREATOR.API.addRecord(config).then(function(response){
+        if(response.code===3000){
+          alert('✅ Ration saved successfully!\nRecord ID: '+response.data.ID);
+        } else {
+          alert('Save error: '+JSON.stringify(response));
+        }
+      });
+    });
+  } else {
+    /* Fallback: save to localStorage for standalone mode */
+    var history=JSON.parse(localStorage.getItem('rationHistory')||'[]');
+    rationData.id=Date.now();
+    history.unshift(rationData);
+    if(history.length>50)history=history.slice(0,50);
+    localStorage.setItem('rationHistory',JSON.stringify(history));
+    alert('✅ Ration saved locally!\n(Connect to Zoho Creator to sync across devices)\nFarm: '+farm+' | '+new Date().toLocaleString('en-IN'));
+  }
+}
+
+/* ══ PDF — popup window print ══ */
+var _LB="data:image/png;base64,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";function generatePDF(){
+  if(!sI.length){alert('पहले राशन बनाएं / Please select ingredients first.');return}
+
+  var n=computeNutrition();
+
+  /* Capture AI issues via hook */
+  var _issues=[], _econEn='', _econHi='', _prioEn='', _prioHi='', _score=100;
+  var _origRender=renderAIResult;
+  renderAIResult=function(sc,iss,eEn,eHi,pEn,pH){
+    _score=sc;_issues=iss||[];_econEn=eEn;_econHi=eHi;_prioEn=pEn;_prioHi=pH;
+  };
+  try{buildAI(n.tDM,n.dmi,n.tCP,n.cpR,n.meA,n.meR,n.tTDN,n.tdR,n.tNDF,n.tCa,n.caR,n.tP,n.pR,n.ndfP,n.rP,n.cP);}catch(e){}
+  renderAIResult=_origRender;
+  /* Restore screen panel */
+  renderAIResult(_score,_issues,_econEn,_econHi,_prioEn,_prioHi);
+
+  var farm=document.getElementById('fName').value||'N/A';
+  var owner=document.getElementById('oName').value||'N/A';
+  var now=new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+  var profColor=n.profitPerL>=0?'#1b9a6f':'#b71d1b';
+  var scoreColor=_score>=80?'#1b9a6f':_score>=60?'#d85d1a':'#b71d1b';
+  var scoreLabel=_score>=80?'Excellent / उत्कृष्ट':_score>=65?'Good / अच्छा':_score>=50?'Needs Improvement':'Poor / खराब';
+  var critCount=_issues.filter(function(i){return i.severity==='critical'}).length;
+  var warnCount=_issues.filter(function(i){return i.severity==='warning'}).length;
+
+  /* ── Build complete HTML for popup window ── */
+  var catColors={green:'#43A047',dry:'#FFA000',conc:'#EF5350',min:'#7B1FA2',bypass:'#0288D1',supp:'#00897B',da:'#1b9a6f'};
+
+  /* KPI Cards */
+  var kpiHTML=
+    '<div class="sg">'+
+    '<div class="sc g"><div class="v">₹'+n.tCost.toFixed(0)+'</div><div class="l">Total Cost/day</div><div class="lh">कुल लागत/दिन</div></div>'+
+    '<div class="sc o"><div class="v">₹'+n.cpl.toFixed(2)+'</div><div class="l">Cost/Litre</div><div class="lh">प्रति लीटर</div></div>'+
+    '<div class="sc bl"><div class="v">'+n.mk+' L</div><div class="l">Milk/day</div><div class="lh">दूध उत्पादन</div></div>'+
+    '<div class="sc pr"><div class="v" style="color:'+profColor+'">'+(n.profitPerL>=0?'₹':'−₹')+Math.abs(n.profitPerL).toFixed(2)+'</div><div class="l">Profit/Litre</div><div class="lh">मुनाफा/लीटर</div></div>'+
+    '</div>';
+
+  /* Ration composition bars */
+  var total=sI.reduce(function(s,x){return s+x.qty},0);
+  var rcHTML='<div class="sec-title">Ration Composition / राशन संरचना</div>';
+  sI.forEach(function(ig){
+    var pct=total>0?(ig.qty/total*100):0;
+    var col=catColors[ig.cat]||'#90A4AE';
+    rcHTML+='<div class="bar-row">'+
+      '<span class="bar-label">'+ig.n+'</span>'+
+      '<div class="bar-bg"><div class="bar-fill" style="width:'+pct.toFixed(1)+'%;background:'+col+'"></div></div>'+
+      '<span class="bar-pct">'+pct.toFixed(1)+'%</span>'+
+      '<span class="bar-kg">'+ig.qty+'kg</span></div>';
+  });
+
+  /* Ingredient table */
+  var ingRows=sI.map(function(ig){
+    var dot='<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:'+(catColors[ig.cat]||'#999')+';margin-right:4px;vertical-align:middle"></span>';
+    return '<tr><td>'+dot+'<strong>'+ig.n+'</strong><br><small>'+ig.h+'</small></td>'+
+      '<td>'+ig.qty+' kg</td><td>'+ig.dm+'%</td><td>'+ig.cp+'%</td><td>'+ig.tdn+'%</td>'+
+      '<td>'+ig.nel+'</td><td>'+ig.ca+'%</td><td>'+ig.p+'%</td>'+
+      '<td>₹'+ig.pr+'/kg</td><td><strong>₹'+(ig.qty*ig.pr).toFixed(0)+'</strong></td></tr>';
+  }).join('');
+  var ingTotal=sI.reduce(function(s,ig){return s+ig.qty*ig.pr},0);
+  var ingTotalQty=sI.reduce(function(s,ig){return s+ig.qty},0);
+  var itHTML='<div class="sec-title">Ration Ingredients / राशन घटक</div>'+
+    '<table class="data-table"><thead><tr>'+
+    '<th>Ingredient</th><th>Qty(kg)</th><th>DM%</th><th>CP%</th><th>TDN%</th><th>NEL</th><th>Ca%</th><th>P%</th><th>Rate</th><th>Cost</th>'+
+    '</tr></thead><tbody>'+ingRows+'</tbody>'+
+    '<tfoot><tr class="total-row"><td><strong>Total / कुल</strong></td><td><strong>'+ingTotalQty.toFixed(1)+' kg</strong></td>'+
+    '<td colspan="7"></td><td><strong>₹'+ingTotal.toFixed(0)+'</strong></td></tr></tfoot></table>';
+
+  /* Nutrient analysis */
+  var nut=[
+    {nm:'शुष्क पदार्थ (DM)',r:n.dmi.toFixed(2)+' kg/day',a:n.tDM.toFixed(2)+' kg/day',ok:n.tDM>=n.dmi},
+    {nm:'कच्चा प्रोटीन (CP)',r:n.cpR.toFixed(2)+' kg/day',a:n.tCP.toFixed(2)+' kg/day',ok:n.tCP>=n.cpR},
+    {nm:'ऊर्जा (ME)',r:n.meR.toFixed(2)+' MJ/day',a:n.meA.toFixed(2)+' MJ/day',ok:n.meA>=n.meR},
+    {nm:'कुल पाचक (TDN)',r:n.tdR.toFixed(2)+' kg/day',a:n.tTDN.toFixed(2)+' kg/day',ok:n.tTDN>=n.tdR},
+    {nm:'कैल्शियम (Ca)',r:n.caR.toFixed(2)+' g/day',a:n.tCa.toFixed(2)+' g/day',ok:n.tCa>=n.caR},
+    {nm:'फास्फोरस (P)',r:n.pR.toFixed(2)+' g/day',a:n.tP.toFixed(2)+' g/day',ok:n.tP>=n.pR}
+  ];
+  var naHTML='<div class="sec-title">Nutrient Analysis / पोषक विश्लेषण ('+(n.isBuf?'Buffalo NRC':'Cow NRC')+')</div>'+
+    '<table class="data-table"><thead><tr><th>Nutrient</th><th>Required</th><th>Achieved</th><th>Status</th></tr></thead><tbody>'+
+    nut.map(function(x){return '<tr><td>'+x.nm+'</td><td>'+x.r+'</td><td>'+x.a+'</td><td class="'+(x.ok?'ok':'low')+'">'+(x.ok?'✓ पर्याप्त':'✗ कमी')+'</td></tr>';}).join('')+
+    '</tbody></table>';
+
+  /* Proximate analysis */
+  var prx=[
+    {nm:'Dry Matter',r:n.dmi.toFixed(2),a:n.tDM.toFixed(2),u:'kg/day'},
+    {nm:'Crude Protein',r:n.cpR.toFixed(2),a:n.tCP.toFixed(2),u:'kg/day'},
+    {nm:'TDN',r:n.tdR.toFixed(2),a:n.tTDN.toFixed(2),u:'kg/day'},
+    {nm:'NDF',r:(n.dmi*0.30).toFixed(2),a:n.tNDF.toFixed(2),u:'kg/day'},
+    {nm:'ADF (actual)',r:(n.dmi*0.19).toFixed(2),a:n.tADF.toFixed(2),u:'kg/day'},
+    {nm:'NEL',r:n.tNEL.toFixed(2),a:n.tNELa.toFixed(2),u:'Mcal/day'},
+    {nm:'DCAD',r:'200–400',a:n.dcad.toString(),u:'mEq/day'}
+  ];
+  var paHTML='<div class="sec-title">Proximate Analysis (NRC '+(n.isBuf?'Buffalo':'Dairy Cow')+')</div>'+
+    '<table class="data-table"><thead><tr><th>Nutrient</th><th>Required</th><th>Achieved</th><th>Gap</th><th>Status</th></tr></thead><tbody>'+
+    prx.map(function(x){
+      var g=parseFloat(x.a)-parseFloat(x.r),gp=parseFloat(x.r)>0?(g/parseFloat(x.r)*100).toFixed(1):0;
+      return '<tr><td>'+x.nm+'</td><td>'+x.r+' '+x.u+'</td><td>'+x.a+' '+x.u+'</td>'+
+        '<td style="color:'+(g>=0?'#1b9a6f':'#b71d1b')+'">'+(g>=0?'+':'')+g.toFixed(2)+' ('+gp+'%)</td>'+
+        '<td class="'+(g>=0?'ok':'low')+'">'+(g>=0?'✓':'✗')+'</td></tr>';
+    }).join('')+'</tbody></table>';
+
+  /* Mineral + Fiber cards */
+  var dcadColor=n.dcad>=200&&n.dcad<=400?'#1b9a6f':n.dcad<0?'#b71d1b':'#d85d1a';
+  var minHTML='<div class="sec-title">Mineral Status / खनिज स्थिति</div>'+
+    '<div class="card-grid4">'+
+    '<div class="mini-card"><div class="mini-val">'+n.tCa.toFixed(1)+'g</div><div class="mini-lbl">Calcium</div><div class="mini-sub">('+n.caR.toFixed(1)+'g जरूरत)</div></div>'+
+    '<div class="mini-card"><div class="mini-val">'+n.tP.toFixed(1)+'g</div><div class="mini-lbl">Phosphorus</div><div class="mini-sub">('+n.pR.toFixed(1)+'g जरूरत)</div></div>'+
+    '<div class="mini-card"><div class="mini-val">'+n.caP.toFixed(2)+'</div><div class="mini-lbl">Ca:P Ratio</div><div class="mini-sub">(Ideal: 1.5–2.5)</div></div>'+
+    '<div class="mini-card"><div class="mini-val" style="color:'+dcadColor+'">'+n.dcad+' mEq</div><div class="mini-lbl">DCAD</div><div class="mini-sub">(Lactating: 200–400)</div></div>'+
+    '</div>';
+  var fibHTML='<div class="sec-title">Fiber & Composition / रेशा</div>'+
+    '<div class="card-grid3">'+
+    '<div class="mini-card"><div class="mini-val">'+n.ndfP.toFixed(1)+'%</div><div class="mini-lbl">NDF %</div><div class="mini-sub">(Range: 28–40%)</div></div>'+
+    '<div class="mini-card"><div class="mini-val">'+n.adfP.toFixed(1)+'%</div><div class="mini-lbl">ADF % (actual)</div><div class="mini-sub">(Range: 17–25%)</div></div>'+
+    '<div class="mini-card"><div class="mini-val">'+n.rP+' : '+n.cP+'</div><div class="mini-lbl">Roughage : Conc</div><div class="mini-sub">(Ideal: 60:40)</div></div>'+
+    '</div>';
+
+  /* Energy + Protein balance */
+  var epHTML='<div class="bal-grid">'+
+    '<div><div class="sec-title">Energy Balance</div>'+
+    '<div class="bal-row"><span>ME Required:</span><span>'+n.meR.toFixed(1)+' MJ</span></div>'+
+    '<div class="bal-row"><span>ME Achieved:</span><span>'+n.meA.toFixed(1)+' MJ</span></div>'+
+    '<div class="bal-row"><span>TDN Required:</span><span>'+n.tdR.toFixed(2)+' kg</span></div>'+
+    '<div class="bal-row"><span>TDN Achieved:</span><span>'+n.tTDN.toFixed(2)+' kg</span></div></div>'+
+    '<div><div class="sec-title">Protein Balance</div>'+
+    '<div class="bal-row"><span>CP Required:</span><span>'+n.cpR.toFixed(2)+' kg</span></div>'+
+    '<div class="bal-row"><span>CP Achieved:</span><span>'+n.tCP.toFixed(2)+' kg</span></div>'+
+    '<div class="bal-row"><span>RUP (35%):</span><span>'+(n.tCP*0.35).toFixed(2)+' kg</span></div>'+
+    '<div class="bal-row"><span>RDP (65%):</span><span>'+(n.tCP*0.65).toFixed(2)+' kg</span></div></div>'+
+    '</div>';
+
+  /* AI Recommendations */
+  var aC_map={reduce:'#b71d1b',replace:'#1A5276',consider:'#6A1B9A',increase:'#137a57',review:'#d85d1a'};
+  var aiHTML='<div class="ai-wrap">'+
+    '<div class="ai-hdr">'+
+      '<div class="ai-hdr-left">Recommendations / सुझाव</div>'+
+      '<div class="ai-hdr-right">'+(critCount+warnCount)+' issues identified</div>'+
+    '</div>'+
+    '<div class="ai-score-row">'+
+      '<div class="score-circle" style="background:'+scoreColor+'"><span class="score-num">'+_score+'</span><span class="score-den">/100</span></div>'+
+      '<div>'+
+        '<div class="score-label" style="color:'+scoreColor+'">'+scoreLabel+'</div>'+
+        '<div class="score-sub">'+
+          (critCount>0?'<span style="color:#b71d1b;font-weight:700">● '+critCount+' Critical &nbsp;</span>':'<span style="color:#1b9a6f">✓ No critical issues &nbsp;</span>')+
+          (warnCount>0?'<span style="color:#d85d1a;font-weight:600">● '+warnCount+' Warning</span>':'')+
+        '</div>'+
+      '</div>'+
+    '</div>';
+
+  _issues.forEach(function(issue){
+    var dot=issue.severity==='critical'?'#b71d1b':issue.severity==='warning'?'#d85d1a':'#1b9a6f';
+    var recsHTML='';
+    if(issue.recs&&issue.recs.length){
+      recsHTML='<div class="recs-label">Recommendations / सुझाव</div>';
+      issue.recs.forEach(function(rec){
+        var aC=aC_map[rec.action]||'#137a57';
+        recsHTML+='<div class="rec-row">'+
+          '<span class="rec-ing">'+rec.ing+'</span>'+
+          '<span class="rec-act" style="background:'+aC+'22;color:'+aC+'">'+rec.action.toUpperCase()+(rec.qty?' · '+rec.qty:'')+'</span>'+
+          '<div class="rec-why">'+
+            '<div>'+rec.en+'</div>'+
+            '<div class="rec-why-hi">'+rec.hi+'</div>'+
+          '</div>'+
+        '</div>';
+      });
+    }
+    aiHTML+='<div class="issue-block">'+
+      '<div class="issue-hdr">'+
+        '<span class="issue-dot" style="background:'+dot+'"></span>'+
+        '<div>'+
+          '<div class="issue-title-en">'+issue.ten+'</div>'+
+          '<div class="issue-title-hi">'+issue.thi+'</div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="issue-body">'+
+        '<div class="issue-desc-en">'+issue.aen+'</div>'+
+        '<div class="issue-desc-hi">'+issue.ahi+'</div>'+
+        recsHTML+
+      '</div>'+
+    '</div>';
+  });
+
+  if(!_issues.length){
+    aiHTML+='<div style="padding:14px;text-align:center;color:#1b9a6f;font-weight:600">✓ All nutrients balanced — Excellent ration!</div>';
+  }
+
+  /* Economic insight + Priority action */
+  aiHTML+=
+    '<div class="econ-box">'+
+      '<div class="econ-title">Economic Insight / आर्थिक विश्लेषण</div>'+
+      '<div>'+_econEn+'</div>'+
+      '<div class="hi-text">'+_econHi+'</div>'+
+    '</div>'+
+    '<div class="prio-box">'+
+      '<div class="prio-title">Priority Action / तुरंत करें</div>'+
+      '<div style="font-weight:600">'+_prioEn+'</div>'+
+      '<div class="hi-text">'+_prioHi+'</div>'+
+    '</div>'+
+  '</div>';
+
+  /* ── Open popup window and print ── */
+  var pw=null;try{pw=window.open('','_blank','width=900,height=700,scrollbars=yes,resizable=yes');}catch(e){pw=null;}
+  if(!pw){alert('Popup blocked. Please allow popups or use Share on WhatsApp instead.');return;}
+
+  var fullHTML='<!DOCTYPE html><html><head><meta charset="UTF-8">'+
+    '<title>Doctor Feeds — Ration Report</title>'+
+    '<style>'+
+      '@import url(\'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap\');'+
+      '*{margin:0;padding:0;box-sizing:border-box}'+
+      'body{font-family:Inter,sans-serif;font-size:12px;color:#1a2e24;background:#fff;padding:0}'+
+      /* ── HEADER ── */
+      '.report-header{padding:16px 20px 12px;border-bottom:3px solid #1b9a6f;display:flex;align-items:center;justify-content:space-between;background:#fff}'+
+      '.brand-block{display:flex;align-items:center;gap:10px}'+
+      '.brand-logo{height:48px;width:auto}'+
+      '.brand-name{font-size:17px;font-weight:800;color:#1a2e24;line-height:1.2}'+
+      '.brand-tag{font-size:9px;color:#4a6358;margin-top:2px}'+
+      '.report-title-block{text-align:right}'+
+      '.report-title{font-size:14px;font-weight:700;color:#1a2e24}'+
+      '.report-subtitle{font-size:9px;color:#4a6358;margin-top:2px}'+
+      /* ── INFO BAR ── */
+      '.info-bar{background:#f7fdfb;border:1px solid #d8e6e0;margin:10px 20px;border-radius:6px;padding:8px 14px}'+
+      '.info-line{font-size:11px;color:#1a2e24;line-height:1.9}'+
+      '.info-line strong{color:#1b9a6f}'+
+      /* ── BODY ── */
+      '.body{padding:0 20px 20px}'+
+      /* ── KPI CARDS ── */
+      '.sg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0}'+
+      '.sc{padding:12px;border-radius:6px;text-align:center}'+
+      '.sc.g{background:#eafdf7;border:1px solid #7dcfb0;border-top:3px solid #1b9a6f}'+
+      '.sc.o{background:#fff3ec;border:1px solid #f0a885;border-top:3px solid #d85d1a}'+
+      '.sc.bl{background:#eafdf7;border:1px solid #7dcfb0;border-top:3px solid #137a57}'+
+      '.sc.pr{background:#f4f6f5;border:1px solid #d8e6e0;border-top:3px solid #4a6358}'+
+      '.sc .v{font-size:18px;font-weight:800;margin-bottom:2px}'+
+      '.sc.g .v{color:#1b9a6f}.sc.o .v{color:#d85d1a}.sc.bl .v{color:#137a57}'+
+      '.sc .l{font-size:10px;font-weight:600;color:#1a2e24}.sc .lh{font-size:9px;color:#4a6358}'+
+      /* ── SECTION TITLE ── */
+      '.sec-title{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#1a2e24;padding:10px 0 6px;border-bottom:2px solid #1b9a6f;margin-bottom:8px}'+
+      /* ── BARS ── */
+      '.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:10px}'+
+      '.bar-label{width:140px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0}'+
+      '.bar-bg{flex:1;background:#f0f0f0;border-radius:50px;height:12px;overflow:hidden}'+
+      '.bar-fill{height:100%;border-radius:50px}'+
+      '.bar-pct{width:38px;text-align:right;font-weight:700;color:#4a6358;flex-shrink:0}'+
+      '.bar-kg{width:40px;text-align:right;font-size:9px;color:#aaa;flex-shrink:0}'+
+      /* ── TABLES ── */
+      '.data-table{width:100%;border-collapse:collapse;font-size:10px;margin-bottom:12px}'+
+      '.data-table th{background:#f7fdfb;color:#1a2e24;padding:7px 8px;text-align:left;font-weight:700;font-size:9px;border-bottom:2px solid #1b9a6f;text-transform:uppercase;letter-spacing:.3px}'+
+      '.data-table td{padding:6px 8px;border-bottom:1px solid #f0f0f0}'+
+      '.data-table tr:nth-child(even) td{background:#fafafa}'+
+      '.total-row td{background:#eafdf7!important;font-weight:700}'+
+      '.ok{color:#1b9a6f;font-weight:700}.low{color:#b71d1b;font-weight:700}'+
+      /* ── MINI CARDS ── */
+      '.card-grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}'+
+      '.card-grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}'+
+      '.mini-card{text-align:center;padding:10px 8px;border:1px solid #d8e6e0;border-radius:6px;background:#fff}'+
+      '.mini-val{font-size:16px;font-weight:700;color:#1b9a6f}'+
+      '.mini-lbl{font-size:9px;font-weight:600;color:#1a2e24;margin:3px 0 1px}'+
+      '.mini-sub{font-size:8px;color:#999}'+
+      /* ── BALANCE ── */
+      '.bal-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:12px}'+
+      '.bal-row{display:flex;justify-content:space-between;padding:4px 0;font-size:11px;border-bottom:1px solid #f0f0f0}'+
+      '.bal-row span:last-child{font-weight:600}'+
+      /* ── AI SECTION ── */
+      '.ai-wrap{border:1px solid #d8e6e0;border-left:4px solid #1b9a6f;border-radius:6px;overflow:hidden;margin-top:12px}'+
+      '.ai-hdr{background:#f7fdfb;padding:9px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #d8e6e0}'+
+      '.ai-hdr-left{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:#1a2e24}'+
+      '.ai-hdr-right{font-size:9px;color:#4a6358}'+
+      '.ai-score-row{display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid #eee}'+
+      '.score-circle{width:44px;height:44px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}'+
+      '.score-num{font-size:14px;font-weight:800;color:#fff;line-height:1}'+
+      '.score-den{font-size:7px;color:rgba(255,255,255,.8)}'+
+      '.score-label{font-size:12px;font-weight:700;margin-bottom:2px}'+
+      '.score-sub{font-size:9px}'+
+      '.issue-block{border-bottom:1px solid #f0f0f0;padding:8px 14px}'+
+      '.issue-block:last-of-type{border-bottom:none}'+
+      '.issue-hdr{display:flex;align-items:flex-start;gap:8px;margin-bottom:5px}'+
+      '.issue-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:3px}'+
+      '.issue-title-en{font-size:11px;font-weight:700;color:#1a2e24;line-height:1.4}'+
+      '.issue-title-hi{font-size:9px;color:#4a6358;line-height:1.4;margin-top:1px}'+
+      '.issue-body{padding-left:16px}'+
+      '.issue-desc-en{font-size:10px;color:#1a2e24;line-height:1.6;margin-bottom:2px}'+
+      '.issue-desc-hi{font-size:9px;color:#4a6358;line-height:1.5;margin-bottom:6px}'+
+      '.recs-label{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#999;margin-bottom:4px}'+
+      '.rec-row{display:flex;align-items:flex-start;gap:6px;padding:4px 0;border-top:1px solid #f5f5f5;font-size:9px}'+
+      '.rec-ing{font-weight:700;color:#1a2e24;min-width:130px;flex-shrink:0}'+
+      '.rec-act{padding:1px 6px;border-radius:3px;font-size:8px;font-weight:700;flex-shrink:0;white-space:nowrap;align-self:flex-start;margin-top:1px}'+
+      '.rec-why{flex:1;line-height:1.5}'+
+      '.rec-why-hi{color:#4a6358;font-size:8px;margin-top:1px}'+
+      '.econ-box{background:#eafdf7;border:1px solid #7dcfb0;border-radius:5px;margin:8px 14px;padding:9px 12px;font-size:10px;line-height:1.6}'+
+      '.econ-title{font-weight:700;color:#1a2e24;margin-bottom:3px;font-size:10px}'+
+      '.prio-box{background:#fff3ec;border:1px solid #f0a885;border-radius:5px;margin:6px 14px 12px;padding:9px 12px;font-size:10px;line-height:1.6}'+
+      '.prio-title{font-weight:700;color:#d85d1a;margin-bottom:3px;font-size:10px}'+
+      '.hi-text{color:#4a6358;font-size:9px;margin-top:2px}'+
+      /* ── FOOTER ── */
+      '.report-footer{border-top:2px solid #1b9a6f;padding:8px 20px;display:flex;justify-content:space-between;align-items:center;font-size:9px;color:#4a6358;margin-top:12px}'+
+      /* ── PRINT ── */
+      '@media print{'+
+        '.no-print{display:none!important}'+
+        'body{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}'+
+        '@page{margin:8mm;size:A4}'+
+        '.data-table{font-size:9px!important}'+
+        '.data-table td,.data-table th{padding:5px 6px!important}'+
+      '}'+
+    '</style>'+
+    '</head><body>'+
+
+    /* HEADER */
+    '<div class="report-header">'+
+      '<div class="brand-block">'+
+        '<img class="brand-logo" src="'+_LB+'" alt="Doctor Feeds">'+
+        '<div>'+
+          '<div class="brand-name">Doctor Feeds</div>'+
+          '<div class="brand-tag">Where Care Meets Nutrition</div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="report-title-block">'+
+        '<div class="report-title">Ration Balancer Report (NRC)</div>'+
+        '<div class="report-subtitle">राशन बैलेंसर रिपोर्ट</div>'+
+      '</div>'+
+    '</div>'+
+
+    /* INFO BAR */
+    '<div class="info-bar">'+
+      '<div class="info-line"><strong>Farm:</strong> '+farm+' &nbsp;|&nbsp; <strong>Owner:</strong> '+owner+' &nbsp;|&nbsp; <strong>Animal:</strong> '+(n.isBuf?'Buffalo':'Cow')+' – '+sB+' ('+sS+' lactation) &nbsp;|&nbsp; <strong>Date:</strong> '+now+'</div>'+
+      '<div class="info-line"><strong>BW:</strong> '+n.bw+' kg &nbsp;|&nbsp; <strong>Milk:</strong> '+n.mk+' L/day &nbsp;|&nbsp; <strong>Fat:</strong> '+n.ft+'% &nbsp;|&nbsp; <strong>SNF:</strong> '+n.sf+'% &nbsp;|&nbsp; <strong>NRC:</strong> '+(n.isBuf?'Buffalo Standard':'Dairy Cow Standard')+'</div>'+
+    '</div>'+
+
+    /* BODY */
+    '<div class="body">'+
+      kpiHTML+
+      '<div style="page-break-inside:avoid">'+rcHTML+'</div>'+
+      '<div style="page-break-inside:avoid">'+itHTML+'</div>'+
+      '<div style="page-break-inside:avoid">'+naHTML+'</div>'+
+      '<div style="page-break-inside:avoid">'+paHTML+'</div>'+
+      '<div style="page-break-inside:avoid">'+epHTML+'</div>'+
+      '<div style="page-break-inside:avoid">'+minHTML+'</div>'+
+      '<div style="page-break-inside:avoid">'+fibHTML+'</div>'+
+      aiHTML+
+    '</div>'+
+
+    /* DOWNLOAD BAR */
+    '<div class="no-print" style="position:sticky;top:0;background:#1b9a6f;padding:10px 20px;display:flex;gap:10px;align-items:center;justify-content:space-between;z-index:999;box-shadow:0 2px 8px rgba(0,0,0,.2)">'+
+      '<span style="color:#fff;font-weight:700;font-size:13px">Doctor Feeds — Ration Report</span>'+
+      '<div style="display:flex;gap:8px">'+
+        '<button onclick="window.print()" style="background:#fff;color:#1b9a6f;border:none;padding:8px 18px;border-radius:5px;font-weight:700;font-size:13px;cursor:pointer">Print / Save PDF</button>'+
+        '<button onclick="window.close()" style="background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.4);padding:8px 14px;border-radius:5px;font-size:13px;cursor:pointer">Close</button>'+
+      '</div>'+
+    '</div>'+
+
+    /* FOOTER */
+    '<div class="report-footer">'+
+      '<span>Doctor Feeds Pvt Ltd — Ration Balancer (NRC Standards)</span>'+
+      '<span>Generated: '+now+' &nbsp;|&nbsp; Doctor Agrovet</span>'+
+    '</div>'+
+
+    '</body></html>';
+  if(pw){pw.document.write(fullHTML);pw.document.close();}
+
+  /* Auto-trigger print after content loads */
+  pw.onload=function(){
+    setTimeout(function(){try{pw.focus();pw.print();}catch(e){pw.print();}},800);
+  };
+  /* Fallback if onload already fired */
+  setTimeout(function(){
+    try{pw.focus();pw.print();}catch(e){try{pw.print();}catch(e2){}}
+  },1200);
+
+  /* If popup was blocked (pw is null), use Creator navigateParentURL with data URL */
+  if(!pw){
+    /* Build blob URL and open via Creator API */
+    try{
+      var blob=new Blob([fullHTML],{type:'text/html'});
+      var blobUrl=URL.createObjectURL(blob);
+      if(typeof ZOHO!=='undefined'&&ZOHO.CREATOR&&ZOHO.CREATOR.UTIL&&ZOHO.CREATOR.UTIL.navigateParentURL){
+        ZOHO.CREATOR.UTIL.navigateParentURL({action:'open',url:blobUrl,window:'new'});
+      }
+    }catch(e){
+      showShareModal('PDF could not open. Please use WhatsApp share instead.','PDF');
+    }
+  }
+}
+
+/* ══ SHARE ══ */
+function buildShareText(){
+  if(!sI.length)return null;
+  var n=computeNutrition();
+  var farm=document.getElementById('fName').value||'N/A';
+  var owner=document.getElementById('oName').value||'N/A';
+  var now=new Date().toLocaleDateString('hi-IN',{day:'2-digit',month:'long',year:'numeric'});
+  var animalHi=n.isBuf?'भैंस':'गाय';
+  var stageHi={early:'प्रारंभिक दुग्धकाल',mid:'मध्य दुग्धकाल',late:'अंतिम दुग्धकाल',dry:'सूखी',heifer:'बछिया'}[sS]||sS;
+
+  /* Build recommendations in Hindi */
+  var _issues=[];
+  var _origRender=renderAIResult;
+  renderAIResult=function(sc,iss,eEn,eHi,pEn,pHi){_issues=iss||[];};
+  try{buildAI(n.tDM,n.dmi,n.tCP,n.cpR,n.meA,n.meR,n.tTDN,n.tdR,n.tNDF,n.tCa,n.caR,n.tP,n.pR,n.ndfP,n.rP,n.cP);}catch(e){}
+  renderAIResult=_origRender;
+
+  /* ── Short message: Header + Lागत/मुनाफा + Sujhav only ── */
+  var lines=[];
+
+  /* Header */
+  lines.push('*Doctor Feeds - राशन रिपोर्ट*');
+  lines.push('तारीख: '+now);
+  lines.push('डेयरी: '+farm+' | मालिक: '+owner);
+  lines.push('पशु: '+animalHi+' - '+sB+' ('+stageHi+')');
+  lines.push('वजन: '+n.bw+' kg | दूध: '+n.mk+' L/day | फैट: '+n.ft+'%');
+  lines.push('');
+
+  /* Lागत aur Munafa */
+  lines.push('*लागत और मुनाफा:*');
+  lines.push('  कुल चारा लागत: Rs.'+n.tCost.toFixed(0)+'/दिन');
+  lines.push('  लागत प्रति लीटर: Rs.'+n.cpl.toFixed(2));
+  lines.push('  मुनाफा प्रति लीटर: '+(n.profitPerL>=0?'Rs.':'-Rs.')+Math.abs(n.profitPerL).toFixed(2));
+  if(n.profitPerL<0){lines.push('  [चेतावनी: राशन घाटे में है — तुरंत समीक्षा करें]');}
+  lines.push('');
+
+  /* Sujhav - Doctor Feeds */
+  if(_issues.length>0){
+    lines.push('*सुझाव (Doctor Feeds):*');
+    _issues.slice(0,4).forEach(function(issue,i){
+      lines.push(''+(i+1)+'. '+issue.thi);
+      if(issue.recs&&issue.recs.length>0){
+        var rec=issue.recs[0];
+        lines.push('   - '+rec.ing);
+        lines.push('   '+rec.hi);
+      }
+    });
+  } else {
+    lines.push('*सुझाव:* राशन संतुलित है - बढ़िया!');
+  }
+
+  lines.push('');
+  lines.push('Doctor Feeds - Ration Balancer');
+  lines.push('Where Care Meets Nutrition');
+  return lines.join('\n');
+}
+
+function shareWhatsApp(){
+  if(!sI.length){alert('पहले राशन बनाएं।');return}
+  var txt=buildShareText();
+  if(!txt)return;
+  var url='https://api.whatsapp.com/send?text='+encodeURIComponent(txt);
+  /* Try every possible method to open the URL */
+  var opened=false;
+  /* Method 1: Creator JS API */
+  if(!opened&&typeof ZOHO!=='undefined'&&ZOHO.CREATOR&&ZOHO.CREATOR.UTIL&&ZOHO.CREATOR.UTIL.navigateParentURL){
+    try{ZOHO.CREATOR.UTIL.navigateParentURL({action:'open',url:url,window:'new'});opened=true;}catch(e){}
+  }
+  /* Method 2: window.top (break out of iframe) */
+  if(!opened){try{window.top.open(url,'_blank');opened=true;}catch(e){}}
+  /* Method 3: window.open */
+  if(!opened){try{var w=window.open(url,'_blank');if(w){w.focus();opened=true;}}catch(e){}}
+  /* Method 4: anchor click trick (works in some webviews) */
+  if(!opened){
+    try{
+      var a=document.createElement('a');
+      a.href=url;a.target='_blank';a.rel='noopener';
+      document.body.appendChild(a);a.click();
+      document.body.removeChild(a);
+      opened=true;
+    }catch(e){}
+  }
+  /* Method 5: Always show modal so user can copy-paste */
+  showShareModal(txt,'WhatsApp');
+}
+
+function shareEmail(){
+  if(!sI.length){alert('Please formulate a ration first.');return}
+  var n=computeNutrition();
+  var farm=document.getElementById('fName').value||'Farm';
+  var owner=document.getElementById('oName').value||'';
+  var now=new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+  var txt=buildShareText();
+  var subj='Ration Report – '+farm+(owner?' ('+owner+')':'')+' – '+now+' – Doctor Feeds';
+  var mailUrl='mailto:?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(txt);
+  var opened=false;
+  /* Method 1: Creator JS API */
+  if(!opened&&typeof ZOHO!=='undefined'&&ZOHO.CREATOR&&ZOHO.CREATOR.UTIL&&ZOHO.CREATOR.UTIL.navigateParentURL){
+    try{ZOHO.CREATOR.UTIL.navigateParentURL({action:'open',url:mailUrl,window:'new'});opened=true;}catch(e){}
+  }
+  /* Method 2: window.top */
+  if(!opened){try{window.top.location.href=mailUrl;opened=true;}catch(e){}}
+  /* Method 3: anchor click */
+  if(!opened){
+    try{
+      var a=document.createElement('a');
+      a.href=mailUrl;a.target='_top';
+      document.body.appendChild(a);a.click();
+      document.body.removeChild(a);
+      opened=true;
+    }catch(e){}
+  }
+  /* Method 4: direct location */
+  if(!opened){try{window.location.href=mailUrl;opened=true;}catch(e){}}
+  /* Always show modal fallback */
+  if(!opened){showShareModal(txt,'Email');}
+}
+/* ══ SHARE MODAL — fallback when clipboard/URL schemes blocked in iframe ══ */
+function showShareModal(txt, type){
+  var existing=document.getElementById('shareModal');
+  if(existing)existing.remove();
+
+  var overlay=document.createElement('div');
+  overlay.id='shareModal';
+  overlay.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);z-index:99999;display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box';
+
+  var modal=document.createElement('div');
+  modal.style.cssText='background:#fff;border-radius:12px;padding:20px;width:100%;max-width:520px;max-height:80vh;display:flex;flex-direction:column;gap:12px;box-shadow:0 8px 32px rgba(0,0,0,.3)';
+
+  var title=document.createElement('div');
+  title.style.cssText='font-size:15px;font-weight:700;color:#1a2e24;display:flex;justify-content:space-between;align-items:center';
+  title.textContent=(type==='WhatsApp'?'Copy & Send on WhatsApp':'Copy & Send by Email');
+  var closeBtn=document.createElement('button');
+  closeBtn.textContent='x';
+  closeBtn.style.cssText='background:none;border:none;font-size:20px;cursor:pointer;color:#999;margin-left:auto';
+  closeBtn.onclick=function(){var m=document.getElementById('shareModal');if(m)m.remove();};
+  title.appendChild(closeBtn);
+
+  var inst=document.createElement('div');
+  inst.style.cssText='font-size:12px;color:#4a6358;background:#eafdf7;padding:8px 12px;border-radius:6px';
+  inst.textContent=type==='WhatsApp'
+    ?'Copy the message below and paste it in WhatsApp.'
+    :'Copy the content below and paste it in your email app.';
+
+  var ta=document.createElement('textarea');
+  ta.value=txt;
+  ta.style.cssText='width:100%;height:200px;padding:10px;font-size:11px;border:1px solid #d8e6e0;border-radius:6px;resize:none;font-family:monospace;line-height:1.5';
+  ta.readOnly=true;
+
+  var btnRow=document.createElement('div');
+  btnRow.style.cssText='display:flex;gap:8px';
+
+  var copyBtn=document.createElement('button');
+  copyBtn.textContent='Copy Message';
+  copyBtn.style.cssText='background:#1b9a6f;color:#fff;border:none;padding:10px 16px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;flex:1';
+  copyBtn.onclick=function(){
+    ta.select();
+    try{
+      document.execCommand('copy');
+      copyBtn.textContent='Copied!';
+      copyBtn.style.background='#137a57';
+      setTimeout(function(){
+        copyBtn.textContent='Copy Message';
+        copyBtn.style.background='#1b9a6f';
+      },2000);
+    }catch(e){
+      alert('Please manually select all text and copy.');
+    }
+  };
+
+  modal.appendChild(title);
+  modal.appendChild(inst);
+  modal.appendChild(ta);
+  modal.appendChild(copyBtn);
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+  /* Auto-select text */
+  setTimeout(function(){ta.select();},100);
+}
+
+</script>
+</body>
+</html>
