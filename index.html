@@ -1811,11 +1811,51 @@ function buildShareText(){
   return lines.join('\n');
 }
 
-function shareWhatsApp(){
-  if(!sI.length){alert('पहले राशन बनाएं।');return}
-  var txt=buildShareText();
-  if(!txt)return;
-  executeSafeShare(txt,'WhatsApp');
+/* ================================
+   WHATSAPP SHARE - ZOHO SAFE
+================================ */
+
+function shareToWhatsApp()
+{
+    try
+    {
+        // 1. Build your message (EDIT THIS PART)
+        var farmName = document.getElementById("fName")?.value || "";
+        var owner = document.getElementById("oName")?.value || "";
+        var milk = document.getElementById("my")?.value || "";
+
+        var message =
+        "🐄 *Doctor Feeds – Ration Report*\n\n" +
+        "👨‍🌾 Farmer: " + owner + "\n" +
+        "🏡 Farm: " + farmName + "\n" +
+        "🥛 Milk Yield: " + milk + " L/day\n\n" +
+        "📊 Balanced ration prepared.\n" +
+        "Contact Doctor Feeds for optimization.";
+
+        // 2. Encode message
+        var encodedMsg = encodeURIComponent(message);
+
+        // 3. WhatsApp URL (WEB SAFE)
+        var waUrl = "https://wa.me/?text=" + encodedMsg;
+
+        // 4. Detect Zoho environment
+        if(typeof ZOHO !== "undefined" && ZOHO.CREATOR)
+        {
+            // Zoho Creator Mobile App / Portal
+            ZOHO.CREATOR.UTIL.openUrl(waUrl, "new window");
+        }
+        else
+        {
+            // Normal browser fallback
+            window.open(waUrl, "_blank");
+        }
+    }
+    catch(e)
+    {
+        console.error("WhatsApp Share Error:", e);
+        alert("Unable to open WhatsApp. Please try again.");
+    }
+}
 }
 
 function shareEmail(){
