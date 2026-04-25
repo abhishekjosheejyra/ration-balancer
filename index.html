@@ -1850,68 +1850,6 @@ function executeSafeShare(txt,type){
     window.open(url,'_blank');
   }
 }
-/* ══ SHARE MODAL — fallback when clipboard/URL schemes blocked in iframe ══ */
-function showShareModal(txt, type){
-  var existing=document.getElementById('shareModal');
-  if(existing)existing.remove();
-
-  var overlay=document.createElement('div');
-  overlay.id='shareModal';
-  overlay.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);z-index:99999;display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box';
-
-  var modal=document.createElement('div');
-  modal.style.cssText='background:#fff;border-radius:12px;padding:20px;width:100%;max-width:520px;max-height:80vh;display:flex;flex-direction:column;gap:12px;box-shadow:0 8px 32px rgba(0,0,0,.3)';
-
-  var title=document.createElement('div');
-  title.style.cssText='font-size:15px;font-weight:700;color:#1a2e24;display:flex;justify-content:space-between;align-items:center';
-  title.textContent=(type==='WhatsApp'?'Copy & Send on WhatsApp':'Copy & Send by Email');
-  var closeBtn=document.createElement('button');
-  closeBtn.textContent='x';
-  closeBtn.style.cssText='background:none;border:none;font-size:20px;cursor:pointer;color:#999;margin-left:auto';
-  closeBtn.onclick=function(){var m=document.getElementById('shareModal');if(m)m.remove();};
-  title.appendChild(closeBtn);
-
-  var inst=document.createElement('div');
-  inst.style.cssText='font-size:12px;color:#4a6358;background:#eafdf7;padding:8px 12px;border-radius:6px';
-  inst.textContent=type==='WhatsApp'
-    ?'Copy the message below and paste it in WhatsApp.'
-    :'Copy the content below and paste it in your email app.';
-
-  var ta=document.createElement('textarea');
-  ta.value=txt;
-  ta.style.cssText='width:100%;height:200px;padding:10px;font-size:11px;border:1px solid #d8e6e0;border-radius:6px;resize:none;font-family:monospace;line-height:1.5';
-  ta.readOnly=true;
-
-  var btnRow=document.createElement('div');
-  btnRow.style.cssText='display:flex;gap:8px';
-
-  var copyBtn=document.createElement('button');
-  copyBtn.textContent='Copy Message';
-  copyBtn.style.cssText='background:#1b9a6f;color:#fff;border:none;padding:10px 16px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;flex:1';
-  copyBtn.onclick=function(){
-    ta.select();
-    try{
-      document.execCommand('copy');
-      copyBtn.textContent='Copied!';
-      copyBtn.style.background='#137a57';
-      setTimeout(function(){
-        copyBtn.textContent='Copy Message';
-        copyBtn.style.background='#1b9a6f';
-      },2000);
-    }catch(e){
-      alert('Please manually select all text and copy.');
-    }
-  };
-
-  modal.appendChild(title);
-  modal.appendChild(inst);
-  modal.appendChild(ta);
-  modal.appendChild(copyBtn);
-  overlay.appendChild(modal);
-  document.body.appendChild(overlay);
-  /* Auto-select text */
-  setTimeout(function(){ta.select();},100);
-}
 
 </script>
 </body>
